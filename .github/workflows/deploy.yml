@@ -13,7 +13,7 @@ jobs:
 
       - name: Upload files via SFTP
         uses: appleboy/scp-action@master
-       with:
+        with:
           server: ${{ secrets.QI_SERVER }}
           username: ${{ secrets.QI_USERNAME }}
           password: ${{ secrets.QI_PASSWORD }}
