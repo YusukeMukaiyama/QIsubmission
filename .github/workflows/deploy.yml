@@ -15,8 +15,9 @@ jobs:
 
       - name: Prepare files for upload
         run: |
-          mkdir deploy
-          rsync -av --exclude='phpMyAdmin' --exclude='admin/csv_bat' --exclude='admin/pdf_bat' ./ deploy/
+          mkdir -p deploy
+          cp -r * deploy/
+          rm -rf deploy/phpMyAdmin deploy/admin/csv_bat deploy/admin/pdf_bat
 
       - name: FTP Deploy
         uses: SamKirkland/FTP-Deploy-Action@4.2.0
@@ -25,4 +26,4 @@ jobs:
           username: ${{ secrets.QI_USERNAME }}
           password: ${{ secrets.QI_PASSWORD }}
           local-dir: deploy/
-          server-dir: /tuneup-works.com/public_html/qisystem/
+          server-dir: /public_html/
