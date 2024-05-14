@@ -16,9 +16,8 @@ jobs:
       - name: Prepare files for upload
         run: |
           mkdir -p deploy
-          cp -r * deploy/
-          rm -rf deploy/phpMyAdmin deploy/admin/csv_bat deploy/admin/pdf_bat
-
+          rsync -av --exclude='phpMyAdmin' --exclude='admin/csv_bat' --exclude='admin/pdf_bat' ./ deploy/
+          
       - name: FTP Deploy
         uses: SamKirkland/FTP-Deploy-Action@4.2.0
         with:
