@@ -40,4 +40,3 @@ jobs:
             admin_new/csv_bat/
           delete: false  # 削除を無効にする
           args: --no-delete  # 削除を無効にするオプション
-          debug: true  # デバッグモードを有効にする
