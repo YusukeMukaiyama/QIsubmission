@@ -14,9 +14,9 @@ jobs:
       - name: Deploy via SFTP
         uses: SamKirkland/FTP-Deploy-Action@4.1.0
         with:
-          server: ${{ secrets.SERVER }}
-          username: ${{ secrets.USERNAME }}
-          password: ${{ secrets.PASSWORD }}
+          server: ${{ secrets.QI_SERVER }}
+          username: ${{ secrets.QI_USERNAME }}
+          password: ${{ secrets.QI_PASSWORD }}
           local-dir: ./  # プロジェクトのルートディレクトリ
           server-dir: '/tuneup-works.com/public_html/qisystem/'  # サーバー上のディレクトリパス
           git-ftp-args: --exclude-from=.gitignore  # .gitignore ファイルを使用
