@@ -14,12 +14,14 @@ jobs:
       - name: Upload files via SFTP
         uses: appleboy/scp-action@master
         with:
-          server: ${{ secrets.QI_SERVER }}
+          host: ${{ secrets.QI_SERVER }}
           username: ${{ secrets.QI_USERNAME }}
           password: ${{ secrets.QI_PASSWORD }}
-          local-dir: ./  # プロジェクトのルートディレクトリ
-          server-dir: '/tuneup-works.com/public_html/qisystem/'  # サーバー上のディレクトリパス
-          git-ftp-args: --exclude-from=.gitignore  # .gitignore ファイルを使用
+          source: "./"  # プロジェクトのルートディレクトリ
+          target: "/tuneup-works.com/public_html/qisystem/"  # サーバー上のディレクトリパス
+          rm: true  # 古いファイルを削除
+          strip_components: 1
+          debug: true  # デバッグモードを有効にする
           exclude: |
             vendor/
             admin/pdf_bat/
@@ -29,4 +31,3 @@ jobs:
             **/.git/*
             admin_new/pdf_bat/
             admin_new/csv_bat/
-          rm: true  # 古いファイルを削除
