@@ -13,13 +13,16 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Sync files via rsync
+      - name: Prepare files for upload
         run: |
-          sudo apt-get update
-          sudo apt-get install -y sshpass rsync
-          rsync -avz --delete \
-            --exclude '/phpMyAdmin' \
-            --exclude '/admin/csv_bat' \
-            --exclude '/admin/pdf_bat' \
-            -e "sshpass -p ${{ secrets.QI_PASSWORD }} ssh -o StrictHostKeyChecking=no" \
-            ./ ${{ secrets.QI_USERNAME }}@${{ secrets.QI_SERVER }}:/tuneup-works.com/public_html/qisystem/
+          mkdir deploy
+          rsync -av --exclude='phpMyAdmin' --exclude='admin/csv_bat' --exclude='admin/pdf_bat' ./ deploy/
+
+      - name: FTP Deploy
+        uses: SamKirkland/FTP-Deploy-Action@4.2.0
+        with:
+          server: ${{ secrets.QI_SERVER }}
+          username: ${{ secrets.QI_USERNAME }}
+          password: ${{ secrets.QI_PASSWORD }}
+          local-dir: deploy/
+          server-dir: /tuneup-works.com/public_html/qisystem/
