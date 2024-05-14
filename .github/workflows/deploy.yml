@@ -17,7 +17,13 @@ jobs:
         run: |
           mkdir -p deploy
           rsync -av --exclude='phpMyAdmin' --exclude='admin/csv_bat' --exclude='admin/pdf_bat' ./ deploy/
-          
+
+      - name: Ensure target directories exist
+        run: |
+          echo "mkdir -p /public_html/top_img" > create_dirs.sh
+          chmod +x create_dirs.sh
+        shell: bash
+
       - name: FTP Deploy
         uses: SamKirkland/FTP-Deploy-Action@4.2.0
         with:
