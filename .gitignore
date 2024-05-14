@@ -1,5 +1,6 @@
-/vendor/
 /admin/pdf_bat/
 /admin/csv_bat/
 /phpMyAdmin/
 /.git/
+/admin_new/pdf_bat/
+/admin_new/csv_bat/
