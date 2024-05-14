@@ -11,8 +11,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: List files before removing .git
+        run: ls -la
+
       - name: Remove .git directory
         run: rm -rf .git
+
+      - name: List files after removing .git
+        run: ls -la
 
       - name: Deploy via SFTP
         uses: SamKirkland/FTP-Deploy-Action@4.1.0
