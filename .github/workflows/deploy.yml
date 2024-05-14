@@ -21,12 +21,12 @@ jobs:
           server-dir: '/tuneup-works.com/public_html/qisystem/'  # サーバー上のディレクトリパス
           git-ftp-args: --exclude-from=.gitignore  # .gitignore ファイルを使用
           exclude: |
-            **/vendor/**
-            **/admin/pdf_bat/**
-            **/admin/csv_bat/**
-            **/phpMyAdmin/**
-            **/.git/**
-            **/admin_new/pdf_bat/**
-            **/admin_new/csv_bat/**
+            vendor/
+            admin/pdf_bat/
+            admin/csv_bat/
+            phpMyAdmin/
+            .git/
+            admin_new/pdf_bat/
+            admin_new/csv_bat/
           delete: false  # 削除を無効にする
           debug: true  # デバッグモードを有効にする
