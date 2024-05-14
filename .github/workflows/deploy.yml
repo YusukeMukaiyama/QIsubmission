@@ -1,0 +1,23 @@
+name: Deploy
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Deploy via SFTP
+        uses: SamKirkland/FTP-Deploy-Action@4.1.0
+        with:
+          server: ${{ secrets.SERVER }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          local-dir: ./  # プロジェクトのルートディレクトリ
+          server-dir: '/tuneup-works.com/public_html/qisystem/'  # サーバー上のディレクトリパス
+          git-ftp-args: --exclude-from=.gitignore  # .gitignore ファイルを使用
+          debug: true  # デバッグモードを有効にする

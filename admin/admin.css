@@ -1,0 +1,49 @@
+body,a,td,th,h1,fieldset {
+	font-size : 12pt;
+	font-weight:normal;
+}
+
+form {
+	margin:0;
+}
+
+table {
+	background-color:#bbb;
+}
+
+th {
+	text-align:left;
+	background-color:#ddd;
+}
+
+td {
+	text-align:left;
+	background-color:#fff;
+	padding:5;
+}
+
+h1 {
+	margin-bottom:15px;
+	padding:5px 15px;
+	border-top:1px solid #bbb;
+	border-bottom:1px solid #bbb;
+	background:#eee;
+}
+
+a {
+	color:#00f;
+	text-decoration:none;
+} 
+a:hover{ 
+	color:#f00;
+	text-decoration:underline;
+}
+
+fieldset{
+	padding:5px;
+}
+
+p{
+	margin-top:10px;
+	margin-bottom:10px;
+}

@@ -1,0 +1,5 @@
+AuthUserFile /Users/mukaiyamayusuke/Desktop/Sites/QIsystem/kango3/admin/.htpasswd
+AuthGroupFile /dev/null
+AuthName "Restricting Access"
+AuthType Basic
+require valid-user

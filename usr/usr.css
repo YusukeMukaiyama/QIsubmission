@@ -1,0 +1,15 @@
+/* charset */
+@charset "shift_jis";
+
+/* default */
+table {	background-color:#dddddd;	}
+tr,td {	background-color:#ffffff;	}
+td {	padding:5;	}
+body,a,td {	font-size : 9pt;	}
+form {	margin:0;	}
+
+/* ƒƒjƒ…[ */
+.menu_clr {	background-color:#ddddff;	}
+
+/* €–Ú */
+.item_clr {	background-color:#eeeeee;	}
