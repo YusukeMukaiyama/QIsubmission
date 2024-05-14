@@ -20,9 +20,9 @@ jobs:
 
       - name: Ensure target directories exist
         run: |
-          echo "mkdir -p /public_html/top_img" > create_dirs.sh
+          echo "mkdir -p /public_html/champion" > create_dirs.sh
           chmod +x create_dirs.sh
-        shell: bash
+          sshpass -p "${{ secrets.QI_PASSWORD }}" ssh -o StrictHostKeyChecking=no ${{ secrets.QI_USERNAME }}@${{ secrets.QI_SERVER }} 'bash -s' < create_dirs.sh
 
       - name: FTP Deploy
         uses: SamKirkland/FTP-Deploy-Action@4.2.0
