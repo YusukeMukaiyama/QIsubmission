@@ -5,7 +5,6 @@ confirm.php
 									(C)2005,University of Hyougo.
 *******************************************************************/
 	require_once "../admin/setup.php";
-	require_once('/Users/mukaiyamayusuke/Desktop/Sites/QIsystem/kango3/public_html/config.php');
 
 	// 正規ログイン以外はログイン画面へリダイレクト
 	if (!$_REQUEST['uid'])  {

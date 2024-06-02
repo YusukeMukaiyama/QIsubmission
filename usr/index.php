@@ -5,7 +5,6 @@ index.php
                                     (C)2005,University of Hyougo.
 *******************************************************************/
 require_once "../admin/setup.php";
-require_once('/Users/mukaiyamayusuke/Desktop/Sites/QIsystem/kango3/public_html/config.php');
 
 $db = Connection::connect(); // 修正: データベース接続の初期化を先頭に移動
 
@@ -47,15 +46,15 @@ function make_login($db)
 
     $specialIDs = [
         "21-01-0001-11-000" => [
-            "url" => "http://localhost/QIsystem/kango3/public_html/usr/cooperation.php?uid=21-01-0001-11-000", // 遷移先URL 1
+            "url" => "../usr/cooperation.php?uid=21-01-0001-11-000", // 遷移先URL 1
             "password" => "194919" // 専用パスワード
         ],
         "21-02-0001-11-001" => [
-            "url" => "http://localhost/QIsystem/kango3/public_html/usr/cooperation.php?uid=21-02-0001-11-001", // 遷移先URL 2
+            "url" => "../usr/cooperation.php?uid=21-02-0001-11-001", // 遷移先URL 2
             "password" => "419162" // 専用パスワード
         ],
         "21-03-0001-11-052" => [
-            "url" => "http://localhost/QIsystem/kango3/public_html/usr/agreement.php?uid=21-03-0001-11-052",   // 遷移先URL 3
+            "url" => "../usr/agreement.php?uid=21-03-0001-11-052",   // 遷移先URL 3
             "password" => "088449" // 専用パスワード
         ]
     ];
@@ -118,7 +117,7 @@ function make_login($db)
                     "<tr><td>\n" .
                     "   <table border='0' cellpadding='1' cellspacing='0' bgcolor='#FFFFFF'>\n" .
                     //"	<tr><td><img src='../usr_img/login_title1.gif' alt='看護師長様用ログインページ' width='376' height='34'></td></tr>\n";
-				    "	<tr><td><img src='http://localhost/QIsystem/kango3/public_html/usr_img/login_title1.gif' alt='看護師長様用ログインページ' width='376' height='34'></td></tr>\n";
+				    "	<tr><td><img src='../usr_img/login_title1.gif' alt='看護師長様用ログインページ' width='376' height='34'></td></tr>\n";
     
             } elseif ($_REQUEST["type"] == "PROCESS") {
                 $contents .=
@@ -126,7 +125,7 @@ function make_login($db)
                     "<tr><td>\n" .
                     "   <table border='0' cellpadding='1' cellspacing='0' bgcolor='#FFFFFF'>\n" .
                     //"	<tr><td><img src='../usr_img/login_title2.gif' alt='看護師様用ログインページ' width='376' height='34'></td></tr>\n";
-				    "	<tr><td><img src='http://localhost/QIsystem/kango3/public_html/usr_img/login_title2.gif' alt='看護師様用ログインページ' width='376' height='34'></td></tr>\n";
+				    "	<tr><td><img src='../usr_img/login_title2.gif' alt='看護師様用ログインページ' width='376' height='34'></td></tr>\n";
             } elseif ($_REQUEST["type"] == "OUTCOME") {
                 $contents .=
                     "<form method='POST' action='" . $_SERVER['PHP_SELF'] . "' target='_blank'>\n" .
@@ -134,13 +133,13 @@ function make_login($db)
                     "<tr><td>\n" .
                     "   <table border='0' cellpadding='1' cellspacing='0' bgcolor='#FFFFFF'>\n" .
                     //"	<tr><td><img src='../usr_img/login_title3.gif' alt='患者様・ご家族の方 ログインページ' width='376' height='34'></td></tr>\n";
-				    "	<tr><td><img src='http://localhost/QIsystem/kango3/public_html/usr_img/login_title3.gif' alt='患者様・ご家族の方 ログインページ' width='376' height='34'></td></tr>\n";
+				    "	<tr><td><img src='../usr_img/login_title3.gif' alt='患者様・ご家族の方 ログインページ' width='376' height='34'></td></tr>\n";
             }
             $contents .=
 				"	<tr><td style='padding:10px;'>\n".
 				"		<table border='0' align='center' cellpadding='0' cellspacing='5'>\n".
 				//"		<tr><td align='right'><img src='../usr_img/login_id.gif' alt='ID' width='33' height='13'></td>".
-				"		<tr><td align='right'><img src='http://localhost/QIsystem/kango3/public_html/usr_img/login_id.gif' alt='ID' width='33' height='13'></td>".
+				"		<tr><td align='right'><img src='../usr_img/login_id.gif' alt='ID' width='33' height='13'></td>".
 				// $_POST['uid']がセットされていればその値を、そうでなければ空の文字列を使用
 				//$uid_value = isset($_POST['uid']) ? $_POST['uid'] : '';
 				// 修正された$uid_valueをフォームのvalue属性に使用
@@ -154,8 +153,8 @@ function make_login($db)
 				//"<td align='left'><input size='25' type='text' maxlength='17' name='uid' id='uid' value='".htmlspecialchars($uid_value, ENT_QUOTES)."'></td></tr>\n";
 
 				//"		<tr><td align='right'><img src='../usr_img/login_pw.gif' alt='PASSWORD' width='112' height='13'></td><td align='left'><input size='25' type='password' name='pass' id='pass'></td></tr>\n".
-				"		<tr><td align='right'><img src='http://localhost/QIsystem/kango3/public_html/usr_img/login_pw.gif' alt='PASSWORD' width='112' height='13'></td><td align='left'><input size='25' type='password' name='pass' id='pass'></td></tr>\n".
-				"		<tr><td colspan='2' align='right'><input type='hidden' name='login' value='1'><input type='image' src='http://localhost/QIsystem/kango3/public_html/usr_img/btn_login.gif' alt='ログイン' width='85' height='20'></td></tr>\n".
+				"		<tr><td align='right'><img src='../usr_img/login_pw.gif' alt='PASSWORD' width='112' height='13'></td><td align='left'><input size='25' type='password' name='pass' id='pass'></td></tr>\n".
+				"		<tr><td colspan='2' align='right'><input type='hidden' name='login' value='1'><input type='image' src='../usr_img/btn_login.gif' alt='ログイン' width='85' height='20'></td></tr>\n".
 				"		</table>\n".
 				"	</td></tr>\n".
 				"	</table>\n".

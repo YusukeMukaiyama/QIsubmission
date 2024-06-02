@@ -3,9 +3,9 @@
 class Config {
     // データベース設定
     const DBHOST = "localhost";
-    const DBNAME = "kango3";
-    const DBUSER = "root";
-    const DBPASS = "nk02hmp424";
+    const DBNAME = "xs728645_qisystem";
+    const DBUSER = "xs728645_qi";
+    const DBPASS = "kangohyogouni";
 
     // COPYRIGHT表示
     const COPYRIGHT = "";

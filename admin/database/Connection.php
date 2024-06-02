@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/../admin/database/Connection.php';
+//require_once __DIR__ . '/../admin/database/Connection.php';
 
 class Connection {
     public static function connect() {

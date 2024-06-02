@@ -4,11 +4,11 @@ chart.php
 	PDF出力
 									 ( C )2005, University of Hyougo.
 *******************************************************************/
+require_once ( "../admin/setup.php" );
+require_once('TCPDF-main/tcpdf.php');
 
-require_once ( "../lib/fpdf/japanese.php" );
 
-class PDF_Hosp extends PDF_Japanese
-{
+class PDF_Hosp extends TCPDF {
 	// レーダーチャートの頂点
 	protected $top_count = 6;
 
@@ -143,7 +143,7 @@ class PDF_Hosp extends PDF_Japanese
 
 		$this->SetLeftMargin ( $this->margin );
 		$this->AddPage ( );
-		$this->SetFont ( "hminchomedium", "", 12 );
+		$this->SetFont ( "msmincho.ttc", "", 12 );
 
 		// フォントサイズの設定
 		$this->SetFontSize ( $this->title_font_size );
@@ -154,7 +154,7 @@ class PDF_Hosp extends PDF_Japanese
 
 		// 主な診療科：　内科　外科　産婦人科　小児科　精神科　その他
 		// 内科：11-9　外科：11-10　産婦人科：11-11　小児科：11-12　精神科：11-13　その他：11-14
-		$this->SetFont ( "hminchomedium", "", 8 );
+		$this->SetFont ( "msmincho.ttc", "", 8 );
 		$str = "主な診療科：";
 		$sql = "SELECT (CASE id1 WHEN '9' THEN '内科' WHEN '10' THEN '外科' WHEN '11' THEN '産婦人科' WHEN '12' THEN '小児科' ".
 				"WHEN '13' THEN '精神科' WHEN '14' THEN 'その他' END)AS type FROM enq_usr_ans ".
@@ -182,7 +182,7 @@ class PDF_Hosp extends PDF_Japanese
 		$str = $str ;
 		$this->Write ( 8, $str );
 		$this->Ln ( );
-		$this->SetFont ( "hminchomedium", "", 12 );
+		$this->SetFont ( "msmincho.ttc", "", 12 );
 
 		$str = "あなたの病院の結果です。" ;
 		$this->Write ( 8, $str );

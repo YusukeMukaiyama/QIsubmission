@@ -5,7 +5,7 @@ q_a.php
 									(C)2005,University of Hyougo.
 *******************************************************************/
 header('Content-Type: text/html; charset=UTF-8');
-require_once __DIR__ . '/../admin_new/setup.php';
+require_once __DIR__ . '/../admin/setup.php';
 
 // データベース接続
 $db = Connection::connect();//

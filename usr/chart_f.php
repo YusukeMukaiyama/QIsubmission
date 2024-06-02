@@ -10,7 +10,6 @@ chart.php
 require_once('../lib/fpdf/japanese.php');
 require_once("../lib/chart_lib_f.php");
 require_once('auth.php');
-require_once('/Users/mukaiyamayusuke/Desktop/Sites/QIsystem/kango3/public_html/config.php');
 
 if (isset($_REQUEST['uid']) && !empty($_REQUEST['uid'])) {
     $uid = $_REQUEST['uid'];

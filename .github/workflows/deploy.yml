@@ -18,12 +18,6 @@ jobs:
           mkdir -p deploy
           rsync -av --exclude='phpMyAdmin' --exclude='admin/csv_bat' --exclude='admin/pdf_bat' ./ deploy/
 
-      - name: Ensure target directories exist
-        run: |
-          echo "mkdir -p /public_html/champion" > create_dirs.sh
-          chmod +x create_dirs.sh
-          sshpass -p "${{ secrets.QI_PASSWORD }}" ssh -o StrictHostKeyChecking=no ${{ secrets.QI_USERNAME }}@${{ secrets.QI_SERVER }} 'bash -s' < create_dirs.sh
-
       - name: FTP Deploy
         uses: SamKirkland/FTP-Deploy-Action@4.2.0
         with:

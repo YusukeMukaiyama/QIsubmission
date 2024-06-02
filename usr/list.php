@@ -12,7 +12,6 @@ list.php
 	}
 
 	require_once "../admin/setup.php";
-	require_once('/Users/mukaiyamayusuke/Desktop/Sites/QIsystem/kango3/public_html/config.php');
 
 	$db = Connection::connect();	// データベース接続
 

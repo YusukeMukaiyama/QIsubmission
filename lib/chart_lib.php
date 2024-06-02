@@ -1,184 +1,228 @@
 <?php
-// エラーログ設定: 開発環境では有効、本番環境では無効またはログに記録
-ini_set('display_errors', '0');
-ini_set('log_errors', '1');
-error_reporting(E_ALL);
 /*-------------------------------------------------------------------------------------------------
 chart_lib.php
---ユーザ毎の結果PDF作成
+ユーザ毎の結果PDF作成
 -------------------------------------------------------------------------------------------------*/
-require_once ( "../admin_new/setup.php" );
+require_once ( "../admin/setup.php" );
 require_once('TCPDF-main/tcpdf.php');
 
 $db = Connection::connect();	
 
-class PDF extends TCPDF {
-    protected $top_count = 6;
-    protected $margin = 10;
-    protected $str_point = array("全国平均", "今年の結果", "前年の結果", "前々年の結果");
-    protected $title_font_size = 16;
-    protected $cell_font_size = 10;
-    protected $cell_header_height = 8;
-    protected $cell_data_height = 8;
-    protected $cell_title_width = 50;
-    protected $cell_point_width = 30;
-    protected $center_x = 90;
-    protected $center_y = 170;
-    protected $size = 40;
-    protected $base_line_color = 192;
-    protected $round_count = 4;
-    protected $percent_font_size = 10;
-    protected $item_font_size = 14;
-    protected $data_line_color = array(array(192, 0, 0), array(0, 192, 0), array(0, 0, 192), array(192, 0, 192));
-    protected $data_line_width = 0.5;
-    protected $dash_array = array(array(5), array(), array(10, 3), array(10, 3, 3));
-    protected $dash_space_length = 5;
+class PDF extends TCPDF
+{
+  // レーダーチャートの頂点
+  protected $top_count = 6;
 
-    public function __construct() {
-      parent::__construct();
-      $this->AddPage();
+  // ページの左マージン
+  protected $margin = 10;
 
-      // 日本語の明朝体フォントを追加
-      $this->SetFont('hminchomedium', '', 12);
-    }
+  // 平均/評価の文字列
+  //protected $str_point = array ( "全国平均", "今回の結果", "前回の結果", "前々回の結果" );
+  protected $str_point = array("全国平均", "今年の結果", "前年の結果" ,"前々年の結果");
 
-    /*******************************************************************
+  /*** タイトル部 ***/
+  // タイトルのフォントサイズ
+  protected $title_font_size = 16;
+
+  /*** セル ***/
+  // セルのフォントサイズ
+  protected $cell_font_size = 10;
+  // セルの高さ ( ヘッダ )
+  protected $cell_header_height = 8;
+  // セルの高さ ( データ )
+  protected $cell_data_height = 8;
+  // セルの幅 ( 項目 )
+  protected $cell_title_width = 50;
+  // セルの幅 ( 点数 )
+  protected $cell_point_width = 30;
+
+
+  /*** レーダーチャート ***/
+  // レーダーチャート表示位置のX座標
+  protected $center_x = 90;
+  // レーダーチャート表示位置のY座標
+  protected $center_y = 170;
+  // レーダーチャートの半径
+  protected $size = 40;
+  // レーダーチャートベースの線色 ( グレイスケール )
+  protected $base_line_color = 192;
+  // 外周の多重度
+  protected $round_count = 4;
+  // パーセント表示のフォントサイズ
+  protected $percent_font_size = 10;
+  // 項目タイトルのフォントサイズ
+  protected $item_font_size = 14;
+
+  // データ線色 ( R, G, B ) 全国の平均−今回の評価−前回の評価−前々回の評価
+  protected $data_line_color = array ( array ( 192, 0, 0 ), array ( 0, 192, 0 ), array ( 0, 0, 192 ), array ( 192, 0, 192 ) );
+  // データ線の太さ
+  protected $data_line_width = 0.5;
+  // 点線の実線部長の配列
+  protected $dash_array = array ( array ( 5 ), array ( ), array ( 10, 3 ), array ( 10, 3, 3 ) );
+  // 点線の空白長
+  protected $dash_space_length = 5;
+
+
+  public function __construct() {
+
+    parent::__construct();
+    $this->AddPage();
+
+    // 日本語の明朝体フォントフォントの追加
+    $fontfile = '../lib/TCPDF-main/fonts/MSMINCHO.TTF';
+    $fontname = TCPDF_FONTS::addTTFfont($fontfile, 'TrueTypeUnicode', '', 32);
+
+    // フォントを設定
+    $this->SetFont($fontname, '', 12);
+  }
+  
+
+  /*******************************************************************
     PDFをブラウザで表示します
     概要：PDFをブラウザで表示
     引数：ファイル名、得点の配列、タイトルの配列、満点の配列、カテゴリ ( String )
     戻値：なし
-    *******************************************************************/
-    function ViewChart ( $id )
-    {
-      $filename = $id.".pdf"; // ファイル名
-      $year = substr ( $id, 0, 2 );
-      $type = getTypeNo ( substr ( $id, 14 ) ); // カテゴリ
-      $arr_avg = getNowAverage ( $year, $type, FALSE ); // 全国の平均
-
-      $this->CreateChart ( $id, $arr_avg ); // PDF作成
-
-      // PDFファイルをブラウザに出力する
-      $pdfdata = $this->Output ( "", "S" );
-      header ( "Cache-Control: public" );
-      header ( "Pragma: public" );
-      header ( "Content-type: application/pdf" );
-      header ( "Content-disposition: inline;filename=".$filename );
-      header ( "Content-length: ".strlen ( $pdfdata ) );
-
-      echo ( $pdfdata );
-
-      exit;
+  *******************************************************************/
+  public function ViewChart ( $id )
+  {
+    $filename = $id.".pdf"; // ファイル名
+    $year = substr ( $id, 0, 2 );
+    $type = getTypeNo ( substr ( $id, 14 ) ); // カテゴリ
+    $arr_avg = getNowAverage ( $year, $type, FALSE ); // 全国の平均
+    $this->CreateChart ( $id, $arr_avg ); // PDF作成
+    // PDFファイルをブラウザに出力する
+    $pdfdata = $this->Output ( "", "S" );
+    // 出力バッファをクリア
+    if (ob_get_length()) {
+      ob_end_clean();
     }
+    header ( "Cache-Control: public" );
+    header ( "Pragma: public" );
+    header ( "Content-type: application/pdf" );
+    header ( "Content-disposition: inline;filename=".$filename );
+    header ( "Content-length: ".strlen ( $pdfdata ) );
 
-    /*******************************************************************
-      PDFデータを保存します
-      概要：PDFデータを保存
-      引数：ファイル名、得点の配列、タイトルの配列、満点の配列
-      戻値：なし
-    *******************************************************************/
-    function SaveChart ( $id, $arr_avg, $filepath = "./pdf/" )
-    {
-      $filename = $id.".pdf"; // ファイル名
+    echo ( $pdfdata );
 
-      $this->CreateChart ( $id, $arr_avg, FALSE );  // PDF作成
-      $this->Output ( $filepath.$filename, "F" ); // PDFファイルを保存
+    exit;
+
+  }
+
+  /*******************************************************************
+    PDFデータを保存します
+    概要：PDFデータを保存
+    引数：ファイル名、得点の配列、タイトルの配列、満点の配列
+    戻値：なし
+  *******************************************************************/
+  public function SaveChart ( $id, $arr_avg, $filepath = "./pdf/" )
+  {
+
+    $filename = $id.".pdf"; // ファイル名
+
+    $this->CreateChart ( $id, $arr_avg, FALSE );  // PDF作成
+
+    $this->Output ( $filepath.$filename, "F" ); // PDFファイルを保存
+
+  }
+
+  /*******************************************************************
+    PDFを作成します
+    概要：PDFを作成
+    引数：得点の配列、タイトルの配列、満点の配列
+    戻値：なし
+  *******************************************************************/
+  public function CreateChart ( $id, $arr_avg,$view = TRUE )
+  {
+    global $db; // グローバル変数として宣言
+    $year = substr ( $id, 0, 2 );
+
+    // カテゴリ
+    $type = getTypeNo ( substr ( $id, 14 ) );
+
+    // カテゴリ文字列取得
+    $category_str = getCategoryStr ( $type );
+
+    // 大項目
+    $title_array = getLargeItem ( $year, $type );
+
+    // 評価 ( 今回 / 前回 / 前々回 )
+    $arr_pt = getIndividualEvaluation ( $id );
+
+    // 評価に平均の配列を追加 ( 全国の平均 / 今回 / 前回 / 前々回 )
+    // $arr_ptがnullまたは未定義の場合、空の配列で初期化
+    if (!is_array($arr_pt)) {
+      $arr_pt = [];
     }
+    array_unshift ( $arr_pt, $arr_avg );
 
-    /*******************************************************************
-      PDFを作成します
-      概要：PDFを作成
-      引数：得点の配列、タイトルの配列、満点の配列
-      戻値：なし
-    *******************************************************************/
-    function CreateChart ( $id, $arr_avg,$view = TRUE )
-    {
-      $year = substr ( $id, 0, 2 );
-      // カテゴリ
-      $type = getTypeNo ( substr ( $id, 14 ) );
-      // カテゴリ文字列取得
-      $category_str = getCategoryStr ( $type );
-      // 大項目
-      $title_array = getLargeItem ( $year, $type );
-      // 評価 ( 今回 / 前回 / 前々回 )
-      $arr_pt = getIndividualEvaluation ( $id );
-      // 評価に平均の配列を追加 ( 全国の平均 / 今回 / 前回 / 前々回 )
-      // $arr_ptがnullまたは未定義の場合、空の配列で初期化
-      if (!is_array($arr_pt)) {
-        $arr_pt = [];
-      }
-      array_unshift ( $arr_pt, $arr_avg );
-
-      // 満点 ( 今回 / 今回 / 前回 / 前々回 )
-      $max_array = getMaxPoint ( $year, $type );
+    // 満点 ( 今回 / 今回 / 前回 / 前々回 )
+    $max_array = getMaxPoint ( $year, $type );
     
-      // 既存のフォントを追加
-      // PDFドキュメントを初期化し、新しいページを追加
-      //$this->AddPage(); // PDFドキュメントに新しいページを追加
-      // マージンを設定
-      $this->SetLeftMargin($this->margin);
-      // 新しいフォント設定
-      $this->SetFont('hminchomedium', '', 12);
+    // PDFドキュメントを初期化し、新しいページを追加
+    //$this->AddPage(); // PDFドキュメントに新しいページを追加
+    // マージンを設定
+    $this->SetLeftMargin($this->margin);
 
-      // フォントサイズの設定
-      $this->SetFontSize ( $this->title_font_size );
-      // 新しい方法（エンコーディング変換が不要な場合）
-      $str = $category_str."得点結果　";
-      
-      //$this->Write ( 8, $str );
-      $this->Write(8, $str);
+    // フォントサイズの設定
+    $this->SetFontSize ( $this->title_font_size );
+    // セルのタイトル表示
+    $str = $category_str."得点結果　";
+    
+    //$this->Write ( 8, $str );
+    $this->Write(8, $str);
 
-      // フォントサイズの設定
-      $this->SetFontSize ( 10 );
-      // 変更後
-      $str = "注）全国平均とは".($view ? "昨" : "今")."年度参加した全国の病棟の平均値です。";
-      $this->Write ( 9, $str );
+    // フォントサイズの設定
+    $this->SetFontSize ( 10 );
+    $str = "注）全国平均とは".($view ? "昨" : "今")."年度参加した全国の病棟の平均値です。";
+    $this->Write ( 9, $str );
 
-      // 改行
-      $this->Ln ( );
-      $this->Ln ( );
+    // 改行
+    $this->Ln ( );
+    $this->Ln ( );
 
-      // セルヘッダ作成
-      $this->createCell ( $title_array, $arr_pt, $max_array );
-      $this->Ln ( );
-      $this->Ln ( );
-      $this->Ln ( );
+    // セルヘッダ作成
+    $this->createCell ( $title_array, $arr_pt, $max_array );
+    $this->Ln ( );
+    $this->Ln ( );
+    $this->Ln ( );
 
-      // フォントサイズの設定
-      $this->SetFontSize ( $this->title_font_size );
-      // レーダーチャートのタイトル表示
-  
-      $str = $category_str . "得点レーダー";
+    // フォントサイズの設定
+    $this->SetFontSize ( $this->title_font_size );
+    // レーダーチャートのタイトル表示
+    $str = $category_str . "得点レーダー";
 
-      $this->Write ( 8, $str );
-      $this->Ln ( );
+    $this->Write ( 8, $str );
+    $this->Ln ( );
 
-      // レーダーチャートのベース部を作成 ( 100%表示 )
-      $this->CreateChartBase ( $this->top_count, 100 );
+    // レーダーチャートのベース部を作成 ( 100%表示 )
+    $this->CreateChartBase ( $this->top_count, 100 );
 
-      // 項目タイトル部作成
-      $this->CreateRaderChartTitle ( $title_array );
+    // 項目タイトル部作成
+    $this->CreateRaderChartTitle ( $title_array );
 
-      for ( $i = 0;$i < 4;$i++ ) {
-        $this->SetDrawColor ( $this->data_line_color[$i][0], $this->data_line_color[$i][1], $this->data_line_color[$i][2] );
-        // 点線の設定を行います。
-        $this->SetDash ( $this->dash_space_length, $this->dash_array[$i] );
-        // レーダーチャート描画
-        $this->CreateRaderChart ( $arr_pt[$i], $max_array[$i] );
-      }
-
-      $this->createLineDetails ( $arr_pt );
-
-      $this->Ln ( );
-      // フォントサイズの設定
-      $this->SetFontSize ( 14 );
-      // セルのタイトル表示
-      $str = "当該領域で「回答しない」が１項目以上あった場合は0点として表示されます。";
-
-      $this->Write ( 8, $str );
-      $this->Ln ( );
-      $str = "※満点を100として%で表示しております。";    
-      $this->Write ( 8, $str );
+    for ( $i = 0;$i < 4;$i++ ) {
+      $this->SetDrawColor ( $this->data_line_color[$i][0], $this->data_line_color[$i][1], $this->data_line_color[$i][2] );
+      // 点線の設定を行います。
+      $this->SetDash ( $this->dash_space_length, $this->dash_array[$i] );
+      // レーダーチャート描画
+      $this->CreateRaderChart ( $arr_pt[$i], $max_array[$i] );
     }
+
+    $this->createLineDetails ( $arr_pt );
+
+    $this->Ln ( );
+    // フォントサイズの設定
+    $this->SetFontSize ( 14 );
+    // セルのタイトル表示
+    $str = "当該領域で「回答しない」が１項目以上あった場合は0点として表示されます。";
+
+    
+    $this->Write ( 8, $str );
+    $this->Ln ( );
+    $str = "※満点を100として%で表示しております。";    
+    $this->Write ( 8, $str );
+
+  }
 
   /*******************************************************************
     テーブル ( 表 )を作成します
@@ -186,28 +230,35 @@ class PDF extends TCPDF {
     引数：タイトルの配列、得点の配列
     戻値：なし
   *******************************************************************/
-  function createCell ( $title_array, $arr_pt, $max_array )
+  public function createCell ( $title_array, $arr_pt, $max_array )
   {
+
     // セルのフォントサイズの設定
     $this->SetFontSize ( $this->cell_font_size );
+
     // セルのヘッダ部を描画 ※項目（満点）
     $this->Cell($this->cell_title_width, $this->cell_header_height, "項目（満点）", 1, 0, "C");
+
+
     // ※全国平均 今回の結果 前回の結果 前々回の結果
     for ( $i = 0;$i < count ( $this->str_point );$i++ ) {
       $this->Cell($this->cell_point_width, $this->cell_header_height, $this->str_point[$i], 1, 0, "C");
     }
     $this->Ln ( );
+
     // セルのデータ部を描画
     for ( $i = 0;$i < $this->top_count;$i++ ) {
+
       // 列の高さ
       $curret_x = $this->GetX ( );
       $curret_y = $this->GetY ( );
+
       $title = $title_array[$i];
 
       if ( !isset ( $title ) ) $title = "-";
+
       // 項目（満点）
-      $tmp = mb_substr ( $title_array[$i].str_repeat ( "　", 10 ), 0, 10 )." ( ".$max_array[0][$i]." )";  
-      // 満点位置揃え$max_array[0]は今年度の参照ユーザタイプのカテゴリ毎の満点
+      $tmp = mb_substr ( $title_array[$i].str_repeat ( "　", 10 ), 0, 10 )." ( ".$max_array[0][$i]." )";  // 満点位置揃え$max_array[0]は今年度の参照ユーザタイプのカテゴリ毎の満点
       $this->MultiCell($this->cell_title_width, $this->cell_data_height, $tmp, 1, "L");
 
       $next_y = $this->GetY ( );
@@ -232,13 +283,16 @@ class PDF extends TCPDF {
     引数：頂点数、レーダーチャートの最大値
     戻値：なし
   *******************************************************************/
-  function CreateChartBase ( $point_count, $max_chart )
+  public function CreateChartBase ( $point_count, $max_chart )
   {
+
     $rad = 360 / $point_count;
+
     // 線の太さ
     $this->SetLineWidth ( 0.1 );
     // 線の色
     $this->SetDrawColor ( $this->base_line_color );
+
     // 放射線を作成
     for ( $i = 0;$i < $point_count;$i++ ) {
       $current_x = $this->size * sin ( deg2rad ( $rad*$i ) );
@@ -288,12 +342,13 @@ class PDF extends TCPDF {
     引数：タイトルの配列
     戻値：なし
   *******************************************************************/
-  function CreateRaderChartTitle ( $title_array )
+  public function CreateRaderChartTitle ( $title_array )
   {
+
     if (!is_array($title_array)) {
       return; // または $title_array = [];
     }
-   
+    
     // フォントサイズの設定
     $this->SetFontSize ( $this->item_font_size );
     // タイトル数
@@ -332,13 +387,14 @@ class PDF extends TCPDF {
       $this->Write(0, $title_array[$i]);
     }
   }
+
   /*******************************************************************
     レーダーチャートのデータ部を描画します
     概要：レーダーチャートのデータ部を描画
     引数：得点の配列、最大値
     戻値：なし
   *******************************************************************/
-  function CreateRaderChart ( $arr_pt, $max )
+  public function CreateRaderChart ( $arr_pt, $max )
   {
     if ( !$max ) return;
 
@@ -383,7 +439,7 @@ class PDF extends TCPDF {
     引数：得点の配列
     戻値：なし
   *******************************************************************/
-  function createLineDetails ( $arr_pt )
+  public function createLineDetails ( $arr_pt )
   {
     // 枠線の太さ
     $line_width = 0.1;
@@ -447,7 +503,7 @@ class PDF extends TCPDF {
     引数：空白部の長さ、実線部の長さ
     戻値：なし
   *******************************************************************/
-  function SetDash ( $space, $line_length_array )
+  public function SetDash ( $space, $line_length_array )
   {
     // 実線長の配列数
     $array_count = count ( $line_length_array );
@@ -469,29 +525,31 @@ class PDF extends TCPDF {
 
 }
 
-// 外部データ処理関数は、実際のデータベース接続や処理ロジックに基づく必要があります。
-// 以下は、関数のプロトタイプです。
 
+// PDF以外の関数
 /*******************************************************************
   大項目を取得します。 ( PDF作成用 )
   概要：大項目を取得 ( １〜６ )
   引数：年度、ユーザタイプ ( 0:構造、1:過程 )
   戻値：大項目 ( 配列 )
 *******************************************************************/
-function getLargeItem($db, $year, $type) {
-  $title_array = [];
-  // 大項目取得
-  $sql = "SELECT id1, name FROM history WHERE year=? AND id=? ORDER BY id1 ASC";
-  $stmt = $db->prepare($sql);
-  $stmt->bind_param("ss", $year, $type);
-  $stmt->execute();
-  $result = $stmt->get_result();
+function getLargeItem ( $year, $type )
+{
+  global $db;
+  $title_array = array ( );
 
-  while ($fld = $result->fetch_object()) {
+  // 大項目取得
+  $sql = "SELECT id1,name FROM history WHERE year='".$year."' AND id='".$type."' ORDER BY id1 ASC";
+  $rs = mysqli_query ( $db, $sql );
+
+  if ( !mysqli_num_rows ( $rs ) ) return NULL; // 既存データなし
+
+  while ( $fld = mysqli_fetch_object ( $rs ) ) {
     $title_array[] = $fld->name;
   }
 
   return $title_array;
+
 }
 
 
@@ -533,6 +591,7 @@ function getNowAverage ( $year, $usrtype, $avg_calc = TRUE )
           echo "テーブルの空にする際のエラー: " . mysqli_error($db);
       }
 
+
       // 集計結果を一時テーブルに保存
       $sql = "INSERT INTO ans_total(id,id1,uid,point) ".
         "SELECT usr_ans.id ,usr_ans.id1 ,usr_ans.uid ,SUM(usr_ans.point)AS sum_point ".
@@ -549,10 +608,14 @@ function getNowAverage ( $year, $usrtype, $avg_calc = TRUE )
           echo "データ挿入時のエラー: " . mysqli_error($db);
       }
 
+//error_log ( $sql."\n" , 3, "/home/hyougo2/public_html/lib/debug.log" );
+
+
       // 大項目ごとに平均を計算
       for ( $i = 0;$i < count ( $id1 );$i++ ) {
 
         $sql = "SELECT ROUND(AVG(point),1)AS avg_point FROM ans_total WHERE id1='".$id1[$i]."'";
+//error_log ( $sql."\n" , 3, "/home/hyougo2/public_html/lib/debug.log" );
 
         $rs = mysqli_query ( $db, $sql );
         if ( !mysqli_num_rows ( $rs ) ) {  // 既存データなし
@@ -591,6 +654,7 @@ function getNowAverage ( $year, $usrtype, $avg_calc = TRUE )
   }
 
   return $avg_point;
+
 }
 
 
@@ -600,12 +664,15 @@ function getNowAverage ( $year, $usrtype, $avg_calc = TRUE )
   引数：ID
   戻値：今回/前回/前々回の評価
 *******************************************************************/
-
 function getIndividualEvaluation ( $uid )
 {
 
   global $db;
+  
+  //$arr_uid = split('-',$uid);古いコード
   $arr_uid = explode('-', $uid);
+
+
   // --------------------------------------------------------------------------------------------
   // 年度
   $year[] = substr ( $uid, 0, 2 );          // 今年
@@ -614,8 +681,10 @@ function getIndividualEvaluation ( $uid )
     $year[] = sprintf ( "%02d", ( int )$year[0] - 1 );  // 昨年
     $year[] = sprintf ( "%02d", ( int )$year[0] - 2 );  // 一昨年
   }
+
   // カテゴリ
   $category = getTypeNo ( substr ( $uid, 14 ) );
+
   // --------------------------------------------------------------------------------------------
   // 大項目ID取得
   $sql = "SELECT id1 FROM history WHERE year='".$year[0]."' AND id='".$category."' ORDER BY id1 ASC";
@@ -642,13 +711,13 @@ function getIndividualEvaluation ( $uid )
       $id1 = ( int )$arr_id1[$j]; // 大項目ID
 
       // 合計点
-      /*
+/*
       $sql = "SELECT SUM(usr_ans.point)AS point FROM item4, usr, usr_ans ".
         "WHERE usr.uid = usr_ans.uid AND usr.id = usr_ans.id ".
         "AND item4.id = usr_ans.id AND item4.id1 = usr_ans.id1 AND item4.id2 = usr_ans.id2 AND item4.id3 = usr_ans.id3 AND item4.id4 = usr_ans.id4 ".
         "AND item4.qtype = '1' AND usr.comp = '1' AND usr.del = '1' ".
         "AND usr_ans.id = '".$category."' AND usr_ans.id1 = '".$id1."' AND usr.uid = '".$serch_id."'";
-      */
+*/
       // ADD 2017/02/06 
       // 設問内容を変更した際に過去の点数が下がってしまう為、設問の紐づき関係なく単純集計に変更。
       $sql = "SELECT SUM(usr_ans.point)AS point "
@@ -657,6 +726,8 @@ function getIndividualEvaluation ( $uid )
            . "WHERE usr.uid = usr_ans.uid AND usr.id = usr_ans.id AND usr.comp = '1' AND usr.del = '1' "
            . " AND CASE WHEN item4.qtype IS NULL THEN '1' ELSE item4.qtype END = '1'"
            . " AND usr_ans.id = '".$category."' AND usr_ans.id1 = '".$id1."' AND usr.uid = '".$serch_id."'";
+
+      //error_log ( $sql."\n" , 3, "/home/hyougo2/public_html/lib/debug.log" );
 
       $rs = mysqli_query ( $db, $sql );
       if ( !mysqli_num_rows ( $rs ) ) {  // 既存データなし
@@ -667,8 +738,11 @@ function getIndividualEvaluation ( $uid )
       }
     }
   }
+
   return $avg_pt;
+
 }
+
 
 /*******************************************************************
   今回/前回/前々回の満点を取得します。
@@ -678,13 +752,19 @@ function getIndividualEvaluation ( $uid )
 *******************************************************************/
 function getMaxPoint ( $year, $type )
 {
-  
+
   global $db;
+
   $max_array = array ( ); // 満点 ( 今回/今回/前回/前々回 )
+
   $iyear = $year; // 年度 ( int )
+
   for ( $i = 0;$i < 3;$i++ ) {
+
     $tmp_max = array ( ); // 一時格納用配列
+
     $serch_year = sprintf ( "%02d", $iyear ); //検索用年度
+
     // 満点取得
     $sql = "SELECT id1, point FROM history WHERE year='".$serch_year."' AND id='".$type."' ORDER BY id1 ASC";
     $rs = mysqli_query ( $db, $sql );
@@ -704,6 +784,7 @@ function getMaxPoint ( $year, $type )
     $iyear--;
 
   }
+
   return $max_array;
 
 }
@@ -726,6 +807,7 @@ function getCategoryStr ( $category )
   return $fld->category;
 
 }
+
 
 /*******************************************************************
   ユーザタイプを取得します。
