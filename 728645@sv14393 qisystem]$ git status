@@ -1,0 +1,155 @@
+commit af68162b6f61f3e64d92e9456e842b5dbd7de388
+Author: YusukeMukaiyama <mukaiyama.yusuke0424@gmail.com>
+Date:   Wed Jun 12 15:07:48 2024 +0900
+
+    Commit before PDF edit
+
+commit 3694206439ad645bb42e79c316472d7da1a69d93
+Author: YusukeMukaiyama <mukaiyama.yusuke0424@gmail.com>
+Date:   Sun Jun 2 13:49:03 2024 +0900
+
+    lib halfway
+
+commit 6241cc0406dd6d3400fedac536b7b1f898f59254
+Author: Yusuke Mukaiyama <mukaiyama.yusuke0424@gmail.com>
+Date:   Tue May 14 17:15:10 2024 +0900
+
+    Ensure target directories exist before deploying
+
+commit bf52841cd0f9cc91886c20f2b2b7e0d83160de60
+Author: Yusuke Mukaiyama <mukaiyama.yusuke0424@gmail.com>
+Date:   Tue May 14 17:12:44 2024 +0900
+
+    Ensure target directories exist before deploying
+
+commit 0fccd223ac0c965216ee874711120b2304fc8304
+Author: Yusuke Mukaiyama <mukaiyama.yusuke0424@gmail.com>
+Date:   Tue May 14 17:11:00 2024 +0900
+
+    test push
+
+commit d782487de0c2d6c82ac884693493a4eff589a691
+Author: Yusuke Mukaiyama <mukaiyama.yusuke0424@gmail.com>
+Date:   Tue May 14 17:00:43 2024 +0900
+
+    Update GitHub Actions workflow to exclude certain directories using rsync
+
+commit d8123f5b5bf29720ac9bbebea8572b7c611186cc
+Author: Yusuke Mukaiyama <mukaiyama.yusuke0424@gmail.com>
+Date:   Tue May 14 16:59:38 2024 +0900
+
+    Update GitHub Actions workflow to only upload necessary files
+
+commit 1fc1c592246bd62f67f036a6fb5499bd0836bcbb
+Author: Yusuke Mukaiyama <mukaiyama.yusuke0424@gmail.com>
+Date:   Tue May 14 16:56:07 2024 +0900
+
+    Update GitHub Actions workflow to use FTP and exclude certain directories
+
+commit fe28e553cb14f97855b93c26b44f0e367cd52cd8
+Author: Yusuke Mukaiyama <mukaiyama.yusuke0424@gmail.com>
+Date:   Tue May 14 16:52:14 2024 +0900
+
+    Update GitHub Actions workflow to exclude certain directories
+
+commit d4a7ebbf374bd4305f40a93321963f8fd9fcae46
+Author: Yusuke Mukaiyama <mukaiyama.yusuke0424@gmail.com>
+Date:   Tue May 14 16:42:43 2024 +0900
+
+    preparation
+
+commit b24ea59085a702f21424d666951369e1a7859f1f
+Author: Yusuke Mukaiyama <mukaiyama.yusuke0424@gmail.com>
+Date:   Tue May 14 16:40:04 2024 +0900
+
+    preparation
+
+commit b1fecd133192f56ffd739c1f3f76f302d2d20d22
+Author: Yusuke Mukaiyama <mukaiyama.yusuke0424@gmail.com>
+Date:   Tue May 14 16:38:04 2024 +0900
+
+    Fix YAML syntax and update deploy.yml
+
+commit e7c182bf83b2f1a16a0c6ab0df8f8856df7647c2
+Author: Yusuke Mukaiyama <mukaiyama.yusuke0424@gmail.com>
+Date:   Tue May 14 16:35:45 2024 +0900
+
+    Fix YAML syntax
+
+commit 5ca91ea128c93c5f7c7659a77e02d46a644a65e0
+Author: Yusuke Mukaiyama <mukaiyama.yusuke0424@gmail.com>
+Date:   Tue May 14 16:34:21 2024 +0900
+
+    preparation
+
+commit 66ceb5c4c6b8a0fd9c42035f998faa5f97b156a9
+Author: Yusuke Mukaiyama <mukaiyama.yusuke0424@gmail.com>
+Date:   Tue May 14 16:11:22 2024 +0900
+
+    preparation
+
+commit c9be95f4ba3ee33103979ee6a52efd97d90c9967
+Author: Yusuke Mukaiyama <mukaiyama.yusuke0424@gmail.com>
+Date:   Tue May 14 16:08:21 2024 +0900
+
+    preparation
+
+commit 6918eba693a5104011ab77ff1bd73251a4b1b98e
+Author: Yusuke Mukaiyama <mukaiyama.yusuke0424@gmail.com>
+Date:   Tue May 14 16:03:04 2024 +0900
+
+    preparation
+
+commit e48799ef0dda3acb8361eea8decd6569e02f6880
+Author: Yusuke Mukaiyama <mukaiyama.yusuke0424@gmail.com>
+Date:   Tue May 14 15:47:59 2024 +0900
+
+    preparation
+
+commit dfac7483da56134f8d9e597b7e761ce83870b5ea
+Author: Yusuke Mukaiyama <mukaiyama.yusuke0424@gmail.com>
+Date:   Tue May 14 15:46:38 2024 +0900
+
+    preparation
+
+commit fdb6aee66bd28a5f3ce6cae3a7d0a1aa2973ee64
+Author: Yusuke Mukaiyama <mukaiyama.yusuke0424@gmail.com>
+Date:   Tue May 14 15:45:15 2024 +0900
+
+    preparation
+
+commit e3575f50704dbb97da9c74333b376b475b525bac
+Author: Yusuke Mukaiyama <mukaiyama.yusuke0424@gmail.com>
+Date:   Tue May 14 15:38:12 2024 +0900
+
+    Initial commit
+
+commit 6f480c20edeb427ee7d5b4aad8a0a7e09c8af937
+Author: Yusuke Mukaiyama <mukaiyama.yusuke0424@gmail.com>
+Date:   Tue May 14 15:22:26 2024 +0900
+
+    Update .gitignore and deploy.yml to exclude specific directories
+
+commit 38489b6e8685e349b27fd5cd6afdbcdc96b16744
+Author: Yusuke Mukaiyama <mukaiyama.yusuke0424@gmail.com>
+Date:   Tue May 14 15:16:43 2024 +0900
+
+    Exclude specific directories from deployment
+
+commit 7acc037ab4af07a1b22133b6a21a24f6b1c056f6
+Author: Yusuke Mukaiyama <mukaiyama.yusuke0424@gmail.com>
+Date:   Tue May 14 15:13:41 2024 +0900
+
+    Exclude .git directory from deployment
+
+commit 0a6b373c268496956e7cb6df663918a86f5bff91
+Author: Yusuke Mukaiyama <mukaiyama.yusuke0424@gmail.com>
+Date:   Tue May 14 14:56:46 2024 +0900
+
+    Update GitHub Actions to deploy on master branch
+
+commit 9a57431f7bd47755e0f61d340de04f15bfeb6930
+Author: Yusuke Mukaiyama <mukaiyama.yusuke0424@gmail.com>
+Date:   Tue May 14 14:45:02 2024 +0900
+
+    Initial commit
