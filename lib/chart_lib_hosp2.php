@@ -68,26 +68,31 @@ class PDF_Hosp extends TCPDF {
 		引数：ファイル名、得点の配列、タイトルの配列、満点の配列、カテゴリ ( String )
 		戻値：なし
 	*******************************************************************/
-	function ViewChart ( $ID )
-	{
-		// ファイル名
-		$filename = $ID."_total.pdf";
+	public function ViewChart($id)
+    {
+        
+        $filename = $id . ".pdf"; // ファイル名
+        $year = substr($id, 0, 2);
+        $type = getTypeNo(substr($id, 14)); // カテゴリ
+        $arr_avg = getNowAverage($year, $type, FALSE); // 全国の平均
+        $this->CreateChart($id, $arr_avg); // PDF作成
+        // PDFファイルをブラウザに出力する
+        $pdfdata = $this->Output("", "S");
+        // 出力バッファをクリア
+        if (ob_get_length()) {
+            ob_end_clean();
+        }
+        header("Cache-Control: public");
+        header("Pragma: public");
+        header("Content-type: application/pdf");
+        header("Content-disposition: inline;filename=" . $filename);
+        header("Content-length: " . strlen($pdfdata));
 
-		// PDF作成
-		$this->CreateChart ( $ID );
+        echo($pdfdata);
 
-		// PDFファイルをブラウザに出力する
-		$pdfdata = $this->Output ( "", "S" );
-		header ( "Cache-Control: public" );
-		header ( "Pragma: public" );
-		header ( "Content-type: application/pdf" );
-		header ( "Content-disposition: inline;filename=".$filename );
-		header ( "Content-length: ".strlen ( $pdfdata ) );
+        exit;
+    }
 
-		echo ( $pdfdata );
-
-		exit;
-	}
 
 	/*******************************************************************
 		PDFデータを保存します
@@ -143,7 +148,7 @@ class PDF_Hosp extends TCPDF {
 
 		$this->SetLeftMargin ( $this->margin );
 		$this->AddPage ( );
-		$this->SetFont ( "msmincho.ttc", "", 12 );
+		$this->SetFont("zenoldmincho", "", 12);
 
 		// フォントサイズの設定
 		$this->SetFontSize ( $this->title_font_size );
@@ -154,7 +159,7 @@ class PDF_Hosp extends TCPDF {
 
 		// 主な診療科：　内科　外科　産婦人科　小児科　精神科　その他
 		// 内科：11-9　外科：11-10　産婦人科：11-11　小児科：11-12　精神科：11-13　その他：11-14
-		$this->SetFont ( "msmincho.ttc", "", 8 );
+		$this->SetFont("zenoldmincho", "", 8);
 		$str = "主な診療科：";
 		$sql = "SELECT (CASE id1 WHEN '9' THEN '内科' WHEN '10' THEN '外科' WHEN '11' THEN '産婦人科' WHEN '12' THEN '小児科' ".
 				"WHEN '13' THEN '精神科' WHEN '14' THEN 'その他' END)AS type FROM enq_usr_ans ".
@@ -182,7 +187,7 @@ class PDF_Hosp extends TCPDF {
 		$str = $str ;
 		$this->Write ( 8, $str );
 		$this->Ln ( );
-		$this->SetFont ( "msmincho.ttc", "", 12 );
+		$this->SetFont("zenoldmincho", "", 12);
 
 		$str = "あなたの病院の結果です。" ;
 		$this->Write ( 8, $str );

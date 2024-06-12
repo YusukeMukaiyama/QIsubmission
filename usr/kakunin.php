@@ -7,34 +7,40 @@
 	システムに必要なテキストを割り当てて表示します。
 
 -------------------------------------------------------------------------------------------------*/
-function replace_text ()
+
+function getHtmlTemplate($filename)
 {
+    if (!file_exists($filename)) {
+        die("ERROR FILE:".__FILE__." LINE:".__LINE__);
+    }
 
-	$html =
-		"<table>\n".
-		"<tr><td>\n".
-		"<form method='POST' action='index.php'><input type='submit' name='no' value='≪　いいえ　'></form>\n".
-		"</td><td>\n".
-		//"<form method='GET' action='q_a.php'><input type='hidden' name='uid' value='".$_REQUEST['uid']."'><input type='submit' name='yes' value='　は　い　≫'></form>\n".
-		"<form method='GET' action='q_a.php'><input type='hidden' name='uid' value='".(isset($_REQUEST['uid']) ? $_REQUEST['uid'] : "")."'><input type='submit' name='yes' value='　は　い　≫'></form>\n".
-
-		"</td></tr>\n".
-		"</table>\n";
-
-	return $html;
-
+    return file_get_contents($filename);
 }
 
-	$filename = "./template_kakunin.html";
-	$hFile = fopen  ( $filename , "r" ) or die  ( "ERROR FILE:".__FILE__." LINE:".__LINE__ );
-	$contents = "";
-	while ( TRUE ) {
-		$data = fread ( $hFile, 8192 );
-		if  ( strlen ( $data ) == 0 ) break;
-		$contents .= $data;
-		unset ( $data );
-	}
-	$contents = str_replace ( "<!-- CONTENTS -->", replace_text(), $contents );
-	echo $contents;
+function generateFormHtml()
+{
+    $uid = isset($_REQUEST['uid']) ? htmlspecialchars($_REQUEST['uid'], ENT_QUOTES, 'UTF-8') : '';
 
+    $formHtml = <<<HTML
+<table>
+<tr><td>
+    <form method='POST' action='index.php'><input type='submit' name='no' value='≪   いいえ   '></form>
+</td><td>
+    <form method='GET' action='q_a.php'>
+        <input type='hidden' name='uid' value='$uid'>
+        <input type='submit' name='yes' value='   は   い   ≫'>
+    </form>
+</td></tr>
+</table>
+HTML;
+
+    return $formHtml;
+}
+
+$filename = "./template_kakunin.html";
+$template = getHtmlTemplate($filename);
+$contentHtml = generateFormHtml();
+$finalOutput = str_replace("<!-- CONTENTS -->", $contentHtml, $template);
+
+echo $finalOutput;
 ?>

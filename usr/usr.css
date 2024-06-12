@@ -1,15 +1,34 @@
 /* charset */
-@charset "shift_jis";
+@charset "UTF-8";
 
 /* default */
-table {	background-color:#dddddd;	}
-tr,td {	background-color:#ffffff;	}
-td {	padding:5;	}
+
 body,a,td {	font-size : 9pt;	}
 form {	margin:0;	}
 
-/* ÉÅÉjÉÖÅ[ */
-.menu_clr {	background-color:#ddddff;	}
+body, h1, h2, h3, h4, h5, h6, p, div, table, tr, td, img {
+  margin: 0;
+  padding: 0;
+}
 
-/* çÄñ⁄ */
-.item_clr {	background-color:#eeeeee;	}
+table.normal {
+  background-color: #FFFFFF; 
+}
+
+
+table {
+  background-color: #FFFFFF; /* ???????? */
+}
+
+h1,h2,h3,h4,h5,h6{border:0; padding:0;margin:0; font-size:12px;}
+	.normal {
+		font-size: 12px;
+		line-height: 150%;
+		text-align:left;
+	}
+	.large {
+		font-size: 14px;
+		line-height: 20px;
+		text-align:left;
+	}
+	

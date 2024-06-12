@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta http-equiv="Content-Style-Type" content="text/css">
-<link rel="stylesheet" href="/QIsystem/1new/public/admin.css"> 
+<link rel="stylesheet" href="./admin.css"> 
 <title>アウトカム質問順序設定</title>
 </head>
 <body>
@@ -18,21 +18,15 @@
 <?php
 
     require_once("setup.php");
+    require_once("common.php");//共通関数を読み込み
 
     $db = Connection::connect(); // データベース接続
 
     // 公開 / 非公開取得
-    $sql = "SELECT pub FROM public";
-    $res = mysqli_query($db, $sql);
-    if (!mysqli_num_rows($res)) die("データの取得に失敗しました");
-    $fld = mysqli_fetch_object($res);
-    $public = $fld->pub;
+    $public = getPublicationStatus($db);
     
-
     if ($public == 1) {//開発中のため、強制的に表示させる(1はclose、2がopen)(正しくは2)
-
-        echo("公開中のため設定変更できません。");
-
+        echo sanitize("公開中のため設定変更できません。");
     } else {
 
         // 質問順序が存在するか確認
@@ -58,7 +52,6 @@
                 $insert_sql = "INSERT INTO q_order (id, id1, id2, id3, order_no) VALUES ({$fld->id}, {$fld->id1}, {$fld->id2}, {$fld->id3}, $order_no)";
                 mysqli_query($db, $insert_sql);
             }
-
         }
 
         // 表示順変更 (上に移動)
@@ -90,7 +83,7 @@
             if ($fld->order_no != $current_order_no) {
                 mysqli_query($db, "UPDATE q_order SET order_no=$current_order_no WHERE id=$fld->id AND id1=$fld->id1 AND id2=$fld->id2 AND id3=$fld->id3 AND id4=$fld->id4");
             }
-            echo "<tr bgcolor='#ffffff'><td>".$fld->id.".".$fld->id1.".".$fld->id2.".".$fld->id3.".".$fld->id4."</td><td>".nl2br($fld->question)."</td><td align='center'>";
+            echo "<tr bgcolor='#ffffff'><td>".sanitize($fld->id.".".$fld->id1.".".$fld->id2.".".$fld->id3.".".$fld->id4)."</td><td>".nl2br(sanitize($fld->question))."</td><td align='center'>";
             if ($current_order_no > 1) {
                 echo "<a href='".$_SERVER['PHP_SELF']."?ord=".$current_order_no."&up=1'>▲</a>";
             }
@@ -124,3 +117,5 @@
 
 </body>
 </html>
+
+

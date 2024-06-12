@@ -1,21 +1,15 @@
 <?php
 /*******************************************************************
 agreement.php
-	ご利用規約
-									(C)2005,University of Hyougo.
-管理者用のログイン後の画面
-アクセスの際には
-http://localhost/QIsystem/kango3/public_html/usr/agreement.php?uid=18-45-0001-10-089
-のようにuid=の後にユーザーIDが必要
+    ご利用規約
+    (C)2005,University of Hyougo.
+    管理者用のログイン後の画面
+    ユーザーIDが必要
 *******************************************************************/
 
 require_once "../admin/setup.php";
 
 // 正規ログインチェック
-/*if (!$_REQUEST['uid']){
-	header("Location: ../index.html");
-	exit();
-}*/
 if (!isset($_REQUEST['uid'])) {
     header("Location: ../index.html");
     exit();
@@ -23,74 +17,75 @@ if (!isset($_REQUEST['uid'])) {
 
 $db = Connection::connect();
 
-function make_agreement($db)
+function make_agreement($db, $uid, $userType)
 {
-	global $id;
+    if (isset($_POST['agree'])) {
+        redirect_by_user_type($uid, $userType);
+    } elseif (isset($_POST['disagree'])) {
+        header("Location: disagree.php?uid=" . htmlspecialchars($uid));
+        exit();
+    }
 
-	// 利用規約同意
-	//if ($_POST['agree']) {
-	if (isset($_POST['agree'])) {
-
-		if ( $id == Config::STRUCTURE ) {	// 構造
-
-			header("Location: cooperation.php?uid=".$_REQUEST['uid']);	// 質問へ
-//			header("Location: q_a.php?uid=".$_REQUEST['uid']);	// 質問へ
-
-		} elseif ( $id == Config::PROCESS ) {	// 過程
-
-			header("Location: cooperation.php?uid=".$_REQUEST['uid']);	// さらに質問ページ
-//			header("Location: kakunin.php?uid=".$_REQUEST['uid']);	// さらに質問ページ
-
-		} elseif ( $id == Config::OUTCOME ) {	// アウトカム
-
-			header("Location: enq.php?uid=".$_REQUEST['uid']);	// アンケートへ
-
-		}
-		exit();
-
-	//} elseif ($_POST['disagree']) {	// ログアウトHTMLへリダイレクト
-	} elseif (isset($_POST['disagree'])) {// ログアウトHTMLへリダイレクト
-
-		header("Location: disagree.php?uid=".$_REQUEST['uid']);
-		exit();
-
-	}
-
-	$contents = "<form method='POST' action='".$_SERVER['PHP_SELF']."'>\n".
-		"<input type='hidden' name='agree' value='同意する'><input type='image' src='../usr_img/btn_agree.gif' alt='同意する' style='padding-right:5px;'>\n".
-		"<input type='hidden' name='uid' value='".$_REQUEST['uid']."'>\n".
-		"</form>\n".
-		"</td><td width='120'>\n".
-		"<form method='POST' action='".$_SERVER['PHP_SELF']."'>\n".
-		"<input type='hidden' name='disagree' value='同意しない'><input type='image' src='../usr_img/btn_disagree.gif' alt='同意しない'>\n".
-		"<input type='hidden' name='uid' value='".$_REQUEST['uid']."'>\n".
-		"</form>\n";
-
-	return $contents;
-
+    return generate_agreement_form($uid);
 }
 
-	$id = UserClassification::GetUserType($_REQUEST['uid']);
+function redirect_by_user_type($uid, $userType)
+{
+    switch ($userType) {
+        case Config::STRUCTURE:
+            header("Location: cooperation.php?uid=" . htmlspecialchars($uid));
+            break;
+        case Config::PROCESS:
+            header("Location: cooperation.php?uid=" . htmlspecialchars($uid));
+            break;
+        case Config::OUTCOME:
+            header("Location: enq.php?uid=" . htmlspecialchars($uid));
+            break;
+        default:
+            throw new Exception("Invalid user type");
+    }
+    exit();
+}
 
-	if ($id == Config::STRUCTURE) {
-		$filename = "template_kiyaku.html";
-	} elseif ($id == Config::PROCESS) {
-		$filename = "template_kiyaku_process.html";
-	} elseif ($id == Config::OUTCOME) {
-		$filename = "template_kiyaku_outcome.html";
-	}
+function generate_agreement_form($uid)
+{
+    return "<form method='POST' action='" . htmlspecialchars($_SERVER['PHP_SELF']) . "'>
+                <input type='hidden' name='agree' value='同意する'>
+                <input type='image' src='../usr_img/btn_agree.gif' class='button-image' alt='同意する' style='padding-right:5px;'>
+                <input type='hidden' name='uid' value='" . htmlspecialchars($uid) . "'>
+            </form>
+            </td><td width='120'>
+            <form method='POST' action='" . htmlspecialchars($_SERVER['PHP_SELF']) . "'>
+                <input type='hidden' name='disagree' value='同意しない'>
+                <input type='image' src='../usr_img/btn_disagree.gif' class='button-image' alt='同意しない'>
+                <input type='hidden' name='uid' value='" . htmlspecialchars($uid) . "'>
+            </form>";
+}
 
-	$handle = fopen ($filename , "r") or die ("file open error\n");
-	$contents = "";
-	while(TRUE) {
-		$data = fread($handle, 8192);
-		if (strlen($data) == 0) {
-			break;
-		}
-		$contents .= $data;
-		unset($data);
-	}
-	$contents =  str_replace("<!-- CONTENTS -->",make_agreement($db), $contents);
-	echo $contents;
+$uid = htmlspecialchars($_REQUEST['uid']);
+$userType = UserClassification::GetUserType($uid);
 
+switch ($userType) {
+    case Config::STRUCTURE:
+        $templateFile = "template_kiyaku.html";
+        break;
+    case Config::PROCESS:
+        $templateFile = "template_kiyaku_process.html";
+        break;
+    case Config::OUTCOME:
+        $templateFile = "template_kiyaku_outcome.html";
+        break;
+    default:
+        throw new Exception("Invalid user type");
+}
+
+$contents = file_get_contents($templateFile);
+if ($contents === false) {
+    die("file open error\n");
+}
+
+$agreementForm = make_agreement($db, $uid, $userType);
+$contents = str_replace("<!-- CONTENTS -->", $agreementForm, $contents);
+
+echo $contents;
 ?>

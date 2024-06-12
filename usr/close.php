@@ -26,7 +26,7 @@
 
 
 function make_logout($db) {
-	$contents = "ログアウト処理が完了しました。<br>ブラウザの閉じるボタンをクリックしてください。<br><br><a href='#' onClick='javascript:window.close();'>閉じる</a>";
+	$contents = "ログアウト処理が完了しました。<br>ブラウザの閉じるボタンをクリックしてください。";
 	return $contents;
 }
 

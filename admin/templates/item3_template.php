@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="Content-Style-Type" content="text/css">
-    <link rel="stylesheet" href="/QIsystem/1new/public/admin.css"> 
+    <link rel="stylesheet" href="admin.css"> 
     <title>小項目編集</title>
 </head>
 <body>

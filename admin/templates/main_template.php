@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <meta http-equiv="Content-Style-Type" content="text/css">
     <!-- <link rel="stylesheet" href="../public/admin.css" media="all"-->
-    <link rel="stylesheet" href="/QIsystem/1new/public/admin.css" media="all"> 
+    <link rel="stylesheet" href="admin.css" media="all"> 
     <title>管理者メニュー</title>
     <style>
         .center { 
             text-align: center; 
             margin: 0 auto; /* 親要素に対して中央に配置 */
-            width: fit-content; /* 要素の内容に合わせた幅にする */
+            width: 100%; /* 要素の内容に合わせた幅にする */
         }
         table { 
             background-color: #bbb; 

@@ -140,7 +140,7 @@ class PDF_Ward extends TCPDF {
     $this->Open ( );
     $this->SetLeftMargin ( $this->margin );
     $this->AddPage ( );
-    $this->SetFont ( "msmincho.ttc", "", 12 );
+    $this->SetFont ( "ZenOldMincho-Regular.ttf", "", 12 );
 
     // フォントサイズの設定
     $this->SetFontSize ( $this->title_font_size );
@@ -150,7 +150,7 @@ class PDF_Ward extends TCPDF {
     $this->Ln ( );
 
     // 病棟の病床区分:
-    $this->SetFont ( "msmincho.ttc", "", 8 );
+    $this->SetFont ( "ZenOldMincho-Regular.ttf", "", 8 );
     $str = "病棟の病床区分：";
     $sql = "SELECT (enq_ans.ans)AS type FROM enq_usr_ans,enq_ans WHERE enq_usr_ans.id = enq_ans.id AND enq_usr_ans.id1 = enq_ans.id1 AND enq_usr_ans.ans = enq_ans.id2 AND enq_usr_ans.id = 11 AND enq_usr_ans.id1 = 15 AND enq_usr_ans.uid LIKE '".$ID."%'";
     $rs = mysqli_query ( $db , $sql );
@@ -169,7 +169,7 @@ class PDF_Ward extends TCPDF {
     }
     $this->Write ( 8, $str );
     $this->Ln ( );
-    $this->SetFont ( "msmincho.ttc", "", 12 );
+    $this->SetFont ( "ZenOldMincho-Regular.ttf", "", 12 );
 
     $str = "あなたの病棟の結果です。";
     $this->Write ( 8, $str );
@@ -329,10 +329,10 @@ class PDF_Ward extends TCPDF {
     // フォントサイズの設定
     $this->SetFontSize ( 14 );
     // セルのタイトル表示
-    $str = mb_convert_encoding ( "当該領域で「回答しない」が１項目以上あった場合は0点として表示されます。", "msmincho.ttc", "EUC-JP" );
+    $str = mb_convert_encoding ( "当該領域で「回答しない」が１項目以上あった場合は0点として表示されます。", "ZenOldMincho-Regular.ttf", "EUC-JP" );
     $this->Write ( 8, $str );
     $this->Ln ( );
-    $str = mb_convert_encoding ( "※満点を100として%で表示しております。", "msmincho.ttc", "EUC-JP" );
+    $str = mb_convert_encoding ( "※満点を100として%で表示しております。", "ZenOldMincho-Regular.ttf", "EUC-JP" );
     $this->Write ( 8, $str );
 
   }
@@ -350,10 +350,10 @@ class PDF_Ward extends TCPDF {
     $this->SetFontSize ( $this->cell_font_size );
 
     // セルのヘッダ部を描画 ※項目（満点）
-    $this->Cell ( $this->cell_title_width, $this->cell_header_height, mb_convert_encoding ( "項目（満点）", "msmincho.ttc", "EUC-JP" ), 1, 0, "C" );
+    $this->Cell ( $this->cell_title_width, $this->cell_header_height, mb_convert_encoding ( "項目（満点）", "ZenOldMincho-Regular.ttf", "EUC-JP" ), 1, 0, "C" );
 
     for ( $i = 0;$i < count ( $this->str_point );$i++ ) {
-      $this->Cell ( $this->cell_point_width, $this->cell_header_height, mb_convert_encoding ( $this->str_point[$i], "msmincho.ttc", "EUC-JP" ), 1, 0, "C" );
+      $this->Cell ( $this->cell_point_width, $this->cell_header_height, mb_convert_encoding ( $this->str_point[$i], "ZenOldMincho-Regular.ttf", "EUC-JP" ), 1, 0, "C" );
     }
     $this->Ln ( );
 
@@ -367,7 +367,7 @@ class PDF_Ward extends TCPDF {
 
       // 項目（満点）
       $tmp = mb_substr ( $title.str_repeat ( "　", 10 ), 0, 10 )." ( ".$max_array[0][$i]." )";  // 満点位置揃え$max_array[0]は今年度の参照ユーザタイプのカテゴリ毎の満点
-      $this->MultiCell ( $this->cell_title_width, $this->cell_data_height, mb_convert_encoding ( $tmp, "msmincho.ttc", "EUC-JP" ), 1, "L" );
+      $this->MultiCell ( $this->cell_title_width, $this->cell_data_height, mb_convert_encoding ( $tmp, "ZenOldMincho-Regular.ttf", "EUC-JP" ), 1, "L" );
 
       $next_y = $this->GetY ( );
       $this->SetXY ( $curret_x + $this->cell_title_width, $curret_y );
@@ -430,7 +430,7 @@ class PDF_Ward extends TCPDF {
         break;
       }
 
-      $this->MultiCell ( $this->cell_title_width ,$this->cell_data_height ,mb_convert_encoding ( $enq_title ,"msmincho.ttc" ,"EUC-JP" ), 1, 'L');
+      $this->MultiCell ( $this->cell_title_width ,$this->cell_data_height ,mb_convert_encoding ( $enq_title ,"ZenOldMincho-Regular.ttf" ,"EUC-JP" ), 1, 'L');
 
       $next_y = $this->GetY();
       $this->SetXY($curret_x + $this->cell_title_width, $curret_y);
@@ -494,7 +494,7 @@ class PDF_Ward extends TCPDF {
       // データ間隔
       $interbal_data = $max_chart / $this->round_count;
       // 文字列設定
-      $str = mb_convert_encoding ( ( $interbal_data * $j ), "msmincho.ttc", "EUC-JP" );
+      $str = mb_convert_encoding ( ( $interbal_data * $j ), "ZenOldMincho-Regular.ttf", "EUC-JP" );
       // 座標設定
       $this->SetXY ( ( $this->center_x - $this->GetStringWidth ( $str ) - 2 ), ( $this->center_y - $interbal_size * $j ) );
       // フォントサイズの設定
@@ -550,7 +550,7 @@ class PDF_Ward extends TCPDF {
       // 座標設定
       $this->SetXY ( $title_x, $title_y );
       // 文字書き込み
-      $this->Write ( 0, mb_convert_encoding ( $title_array[$i], "msmincho.ttc", "EUC-JP" ) );
+      $this->Write ( 0, mb_convert_encoding ( $title_array[$i], "ZenOldMincho-Regular.ttf", "EUC-JP" ) );
     }
   }
 
@@ -642,7 +642,7 @@ class PDF_Ward extends TCPDF {
     $str = "　　　　　　構造\n　　　　　　過程\n　　　　　　アウトカム";
 
     // 長方形をセルで表示
-    $this->MultiCell ( $cell_details_width, $cell_details_height, mb_convert_encoding ( $str, "msmincho.ttc", "EUC-JP" ), 1, "R" );
+    $this->MultiCell ( $cell_details_width, $cell_details_height, mb_convert_encoding ( $str, "ZenOldMincho-Regular.ttf", "EUC-JP" ), 1, "R" );
 
     // 線の太さを設定します。
     $this->SetLineWidth ( $this->data_line_width );

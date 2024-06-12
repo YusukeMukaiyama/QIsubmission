@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html lang="ja">
 <head>
-    <meta charset="Shift_JIS">
+    <meta charset="UTF-8">
     <meta name="Content-Style-Type" content="text/css">
     <link rel="stylesheet" type="text/css" href="./admin.css" media="all">
     <title>ダウンロード</title>

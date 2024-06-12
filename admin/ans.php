@@ -37,10 +37,10 @@ ans.php
 
 		if ($maxno > 4) $adderrstr = "既に選択肢が5個登録されています。";
 
-		$_POST['newitem'] = half2full($_POST['newitem']);	// 全て全角　未入力不可
+		$_POST['newitem'] = StringUtilities::half2full($_POST['newitem']);	// 全て全角　未入力不可
 		if (!$_POST['newitem']) $adderrstr = "回答が未入力です。";	// 回答
 
-		$_POST['newpoint'] = str2int($_POST['newpoint']);	// 数値だけ
+		$_POST['newpoint'] = StringUtilities::str2int($_POST['newpoint']);	// 数値だけ
 
 		if (!$adderrstr) {	// エラーがない場合は項目を追加する
 			$maxid = $maxid + 1;	$maxno = $maxno + 1;	// 最大値+1で最大の値を生成
@@ -61,7 +61,7 @@ ans.php
 		/*** 更新チェック ***/
 		for ($i = 0;$i < sizeof($array_id);$i++) {
 			// 全て全角　未入力不可
-			$_POST['name'.$array_id[$i]] = half2full($_POST['name'.$array_id[$i]]);
+			$_POST['name'.$array_id[$i]] = StringUtilities::half2full($_POST['name'.$array_id[$i]]);
 			if (!$_POST['name'.$array_id[$i]]) $errstr = "回答が未入力です。";	// 項目名
 		}
 
@@ -147,7 +147,7 @@ ans.php
 <head>
 <meta charset="UTF-8">
 
-<link rel="stylesheet" href="/QIsystem/2new/admin_new/admin.css" media="all">
+<link rel="stylesheet" href="admin.css" media="all">
 <title>回答選択肢編集</title>
 </head>
 <body>
@@ -168,10 +168,10 @@ ans.php
 	<tr><td>
 <?php
 	if ($adderrstr) {
-		echo DispErrMsg("登録できませんでした。<br>".$adderrstr)."<br>";
+		echo ErrorHandling::DispErrMsg("登録できませんでした。<br>".$adderrstr)."<br>";
 	}
 	if ($errstr) {
-		echo DispErrMsg("編集できませんでした。<br>".$errstr)."<br>";
+		echo ErrorHandling::DispErrMsg("編集できませんでした。<br>".$errstr)."<br>";
 	}
 ?>
 <?php

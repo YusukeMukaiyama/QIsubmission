@@ -25,17 +25,17 @@ list.php
 	$item4_no = "";
 
 ?>
-<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN'
-'http://www.w3.org/TR/html4/loose.dtd'>
+<!DOCTYPE HTML>
 <html>
 <head>
-<meta http-equiv='Content-Type' content='text/html; charset=euc-jp'>
-<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
-<title>看護ケアの質評価・改善システム</title>
-<link href='../style.css' rel='stylesheet' type='text/css'>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+  <title>看護ケアの質評価・改善システム</title>
+  <link href='liststyle.css' rel='stylesheet' type='text/css'>
 <style>
     .image-container {
         display: block; /* 画像が新しい行に表示されるように */
+				max-width: 760px; /* 画像の最大幅を設定 */
         width: 100%; /* コンテナの幅を設定 */
         text-align: center; /* 画像を中央に配置 */
     }
@@ -43,6 +43,16 @@ list.php
         max-width: 760px; /* 画像の最大幅を設定 */
         height: auto; /* 高さが自動的に調整されるように */
     }
+		img { display: block; }
+    .td {
+			font-family: Arial, sans-serif;
+			border-collapse: collapse;
+			line-height: 150%;
+			padding: 0;
+			font-size: 12px; /* フォントサイズを12pxに設定 */
+		}
+	
+		
 </style>
 </head>
 <body>
@@ -53,7 +63,7 @@ list.php
 <tr class="spnon"><td><img src="../usr_img/spacer.gif" width="760" height="10" border="0" alt=""></td></tr>
 <tr><td background="../usr_img/sub_band.jpg">
 	<table width="100%"  border="0" cellspacing="0" cellpadding="0">
-	<tr><td width="1"><img src="../img/spacer.gif" width="10" height="20"></td><td class='large'><font color='#FF6600'>≫</font>ＷＥＢ自己評価</td></tr>
+	<tr><td width="1"><img src="../img/spacer.gif" width="10" height="20"></td><td class='normal'><font color='#FF6600'>≫</font>ＷＥＢ自己評価</td></tr>
 	</table>
 	</td></tr>
 <tr><td valign='top' style="padding:5px;">
@@ -87,8 +97,6 @@ function enum_enquete ( &$enq_answered )
 		$enq = preg_replace ('<\!--\{ex_([0-9]+)\}-->', '', $enq);
 		$html .= "<table width='100%' cellpadding='5' cellspacing='0' style='border:1px solid #999;' class='normal'>\n";
 		$html .= "<tr><td>".nl2br($enq)."</td></tr>\n";
-//		$html .= "<tr><td>".nl2br($fld->enq)."</td></tr>\n";
-
 		$html .= "<tr><td>";
 
 			// 回答値を取得
@@ -236,24 +244,6 @@ function enum_enquete ( &$enq_answered )
 			$answered = mysqli_num_rows ( $usrares );	// 回答済
 			$usrafld = mysqli_fetch_object ( $usrares );
 			echo "<tr><td>";
-			/*
-			if ($qfld->qtype == TEXT) {
-				echo nl2br($usrafld->ans);
-			} else {
-				// 選択内容取得
-				$asql = "SELECT answer FROM ans WHERE id=".$id." AND id1=".$id1." AND id2=".$id2." AND id3=".$id3." AND id4=".$id4." AND ans_id='".$usrafld->ans."'";
-				$ares = mysqli_query ( $db, $asql  );
-				if ( mysqli_num_rows ( $ares ) ) {
-					$afld = mysqli_fetch_object ( $ares );
-					echo $afld->answer;
-				} else {
-					if ( $answered ) {
-						echo "<span class='no_answer_str'>回答しない</span>";
-					} else {
-						echo "未回答";
-					}
-				}
-			}*/
 			// $qfldがnullでないことを確認
 			if (isset($qfld) && $qfld->qtype == Config::TEXT) {
 				// $usrafldが存在することを確認
@@ -263,19 +253,6 @@ function enum_enquete ( &$enq_answered )
 					echo "未回答"; // $usrafldが存在しない場合
 				}
 			} else {
-				// $usrafldが存在することを確認
-				/*
-				if (isset($usrafld)) {
-					$asql = "SELECT answer FROM ans WHERE id=" . $id . " AND id1=" . $id1 . " AND id2=" . $id2 . " AND id3=" . $id3 . " AND id4=" . $qfld->id4 . " AND ans_id='" . $usrafld->ans . "'";
-					$ares = mysqli_query($db, $asql);
-					if ($ares && $afld = mysqli_fetch_object($ares)) {
-						echo $afld->answer;
-					} else {
-						echo $answered ? "<span class='no_answer_str'>回答しない</span>" : "未回答";
-					}
-				} else {
-					echo "未回答"; // $usrafldが存在しない場合
-				}*/
 				// $usrafldと$qfldが存在することを確認
 				if (isset($usrafld) && isset($qfld)) {
 					if(isset($usrafld->ans)) { // $usrafld->ansが存在することを確認
@@ -395,42 +372,6 @@ function enum_enquete ( &$enq_answered )
 				$usrafld = mysqli_fetch_object ( $usrares );
 
 				echo "<tr><td>";
-				/*過去のもの
-				if ($qfld->qtype == TEXT) {
-					echo nl2br($usrafld->ans);
-				} else {
-					// 選択内容取得
-					//$asql = "SELECT answer FROM ans WHERE id=".$id." AND id1=".$id1." AND id2=".$id2." AND id3=".$id3." AND id4=".$qfld->id4." AND ans_id='".$usrafld->ans."'";
-					//$ares = mysqli_query ( $db, $asql  );
-					if ($usrafld) { // $usrafldがnullでないことを確認
-						$asql = "SELECT answer FROM ans WHERE id=".$id." AND id1=".$id1." AND id2=".$id2." AND id3=".$id3." AND id4=".$qfld->id4." AND ans_id='".$usrafld->ans."'";
-						$ares = mysqli_query($db, $asql);
-						if (mysqli_num_rows($ares)) {
-							$afld = mysqli_fetch_object($ares);
-							echo $afld->answer;
-						} else {
-							if ($answered) {
-								echo "<span class='no_answer_str'>回答しない</span>";
-							} else {
-								echo "未回答";
-							}
-						}
-					} else {
-						echo "未回答"; // $usrafldがnullの場合
-					}
-					
-					if ( mysqli_num_rows ( $ares ) ) {
-						$afld = mysqli_fetch_object ( $ares );
-						echo $afld->answer;
-					} else {
-						if ( $answered ) {
-							echo "<span class='no_answer_str'>回答しない</span>";
-						} else {
-							echo "未回答";
-						}
-					}
-				}
-				echo "</td></tr>\n";*/
 				if ($qfld->qtype == Config::TEXT) {
 					// テキストタイプの場合はそのまま表示
 					//echo nl2br($usrafld->ans);

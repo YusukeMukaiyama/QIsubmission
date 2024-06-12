@@ -10,7 +10,7 @@ class PDF extends BasePDF {
   public function __construct() {
     parent::__construct();
     $this->AddPage();
-    $fontfile = '../lib/TCPDF-main/fonts/MSMINCHO.TTF';
+    $fontfile = '../lib/TCPDF-main/fonts/ZenOldMincho-Regular.ttf';
     $fontname = TCPDF_FONTS::addTTFfont($fontfile, 'TrueTypeUnicode', '', 32);
     $this->SetFont($fontname, '', 12);
   }

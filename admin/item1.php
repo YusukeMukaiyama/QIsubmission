@@ -1,131 +1,140 @@
 <?php
 /*******************************************************************
 item1.php
-    大項目メンテナンス
+--大項目編集
 *******************************************************************/
-require_once("setup.php");
+require_once("setup.php");//設定を読み込み
+require_once("common.php");//共通関数を読み込み
 
-// データベース接続
-$db = Connection::connect();
+$db = Connection::connect();	// データベース接続
 
 $errstr = ''; // エラーメッセージ用変数を初期化
+$public = getPublicationStatus($db);// 公開状況を取得
 
-// 公開ステータスとカテゴリ詳細の取得
-$public = getPublicationStatus($db);
-$categories = fetchCategories($db);
 
-list($idcnt, $itemcnt) = getCategoryItemStats($db);
-processFormInput($db, $public, $errstr);
+// カテゴリ・大項目
+$stmt = mysqli_prepare($db, "SELECT COUNT(category.id) AS idcnt, MAX(item) AS itemcnt FROM category");
+mysqli_stmt_execute($stmt);
+$res = mysqli_stmt_get_result($stmt);
+$fld = mysqli_fetch_object($res);
+$idcnt = $fld->idcnt;
+$itemcnt = $fld->itemcnt;
 
-if (!$errstr) {
-    updateDatabaseEntries($db, $public);
+// 編集内容の評価
+$stmt = mysqli_prepare($db, "SELECT id, id1 FROM item1 ORDER BY id ASC, id1 ASC");
+mysqli_stmt_execute($stmt);
+$res = mysqli_stmt_get_result($stmt);
+while ($fld = mysqli_fetch_object($res)) {
+		if (isset($_POST['regist' . $fld->id])) {
+				$_POST['name' . $fld->id . $fld->id1] = sanitize($_POST['name' . $fld->id . $fld->id1]);
+				if (!$_POST['name' . $fld->id . $fld->id1]) $errstr = "項目名が未入力です。";
+
+				if (!is_numeric($_POST['recommendation' . $fld->id . $fld->id1])) $errstr = "低得点基準は0より大きな値をご入力ください。";
+				if (!is_numeric($_POST['up_recommendation' . $fld->id . $fld->id1])) $errstr = "高得点基準は0より大きな値をご入力ください。";
+
+				if ($public == Config::CLOSE) {
+						$_POST['point' . $fld->id . $fld->id1] = intval($_POST['point' . $fld->id . $fld->id1]);
+						if ($_POST['point' . $fld->id . $fld->id1] < 1) $errstr = "配点は0より大きな値をご入力ください。";
+				}
+		}
 }
 
-// データベースから公開ステータスを取得する
-function getPublicationStatus($db) {
-    $sql = "SELECT pub FROM public";
-    $result = mysqli_query($db, $sql);
-    if ($result) {
-        $fld = mysqli_fetch_object($result);
-        if ($fld) {
-            return $fld->pub;
-        } else {
-            throw new Exception("No publication status found.");
-        }
-    } else {
-        throw new Exception("Publication status fetch failed.");
-    }
-}
-
-
-// データベースからカテゴリごとの統計情報（IDの数とアイテムの最大数）を取得する
-function getCategoryItemStats($db) {
-    $sql = "SELECT COUNT(category.id) AS idcnt, MAX(item) AS itemcnt FROM category";
-    if ($res = mysqli_query($db, $sql)) {
-        $fld = mysqli_fetch_object($res);
-        return array($fld->idcnt, $fld->itemcnt);
-    }
-    die("Category stats fetch failed.");
-}
-
-// フォームからの入力を処理し、有効なデータのみを後続の処理で使うために検証・保存する
-function processFormInput($db, $public, &$errstr) {
-    $sql = "SELECT id, id1 FROM item1 ORDER BY id ASC, id1 ASC";
-    $res = mysqli_query($db, $sql);
-    while ($fld = mysqli_fetch_object($res)) {
-        if (isset($_POST['regist' . $fld->id])) {
-            validateAndSetPostData($fld->id, $fld->id1, $public, $errstr);
-        }
-    }
-}
-
-// 入力されたポストデータを検証し、有効でない場合はエラー文字列を設定する
-function validateAndSetPostData($id, $id1, $public, &$errstr) {
-    $_POST['name' . $id . $id1] = half2full($_POST['name' . $id . $id1]);
-    if (!$_POST['name' . $id . $id1]) $errstr = "項目名が未入力です。";
-
-    if (!is_numeric($_POST['recommendation' . $id . $id1])) $errstr = "低得点基準は0より大きな値をご入力ください。";
-    if (!is_numeric($_POST['up_recommendation' . $id . $id1])) $errstr = "高得点基準は0より大きな値をご入力ください。";
-
-    if ($public == 'CLOSE') {
-        $_POST['point' . $id . $id1] = str2int($_POST['point' . $id . $id1]);
-        if ($_POST['point' . $id . $id1] < 1) $errstr = "配点は0より大きな値をご入力ください。";
-    }
-}
-
-// 有効なフォーム入力に基づいてデータベースのエントリを更新する、既存のクエリをプリペアドステートメントに変更
-function updateDatabaseEntries($db, $public) {
-    $sql = "SELECT id, id1 FROM item1 ORDER BY id ASC, id1 ASC";
-    $result = mysqli_query($db, $sql);
-    while ($fld = mysqli_fetch_object($result)) {
-        if (isset($_POST['regist' . $fld->id])) {
-            list($updateQuery, $params) = buildUpdateQuery($fld, $public, $db);
-            $stmt = mysqli_prepare($db, $updateQuery);
-            mysqli_stmt_bind_param($stmt, 'siii', ...$params);
-            if (!mysqli_stmt_execute($stmt)) {
-                die("Update failed: " . mysqli_error($db));
-            }
-            mysqli_stmt_close($stmt);
-        }
-    }
-}
-
-// 与えられたフィールド情報と公開ステータスに基づき、データベースの更新クエリを構築する
-function buildUpdateQuery($fld, $public, $db) {
-    $id = $fld->id;
-    $id1 = $fld->id1;
-    $name = mysqli_real_escape_string($db, $_POST['name' . $id . $id1]);
-    $recommendation = intval($_POST['recommendation' . $id . $id1]);
-    $up_recommendation = intval($_POST['up_recommendation' . $id . $id1]);
-
-    if ($public == 'CLOSE') {
-        $point = intval($_POST['point' . $id . $id1]);
-        return ["UPDATE item1 SET name=?, point=?, recommendation=?, up_recommendation=? WHERE id=? AND id1=?", [$name, $point, $recommendation, $up_recommendation, $id, $id1]];
-    } else {
-        return ["UPDATE item1 SET name=?, recommendation=?, up_recommendation=? WHERE id=? AND id1=?", [$name, $recommendation, $up_recommendation, $id, $id1]];
-    }
-}
-
-// カテゴリデータを取得する関数
-function fetchCategories($db) {
-    $sql = "SELECT category.item, category.id AS cat_id, category.category, item1.id1, item1.name, item1.point, item1.no, item1.recommendation, item1.up_recommendation 
-            FROM item1 
-            INNER JOIN category ON item1.id = category.id 
-            ORDER BY category.id, item1.no";
-    $result = mysqli_query($db, $sql);
-    $categories = [];
-    while ($row = mysqli_fetch_object($result)) {
-        $categories[$row->cat_id]['category'] = $row->category;
-        $categories[$row->cat_id]['items'][] = $row;
-    }
-    return $categories;
+// 編集内容の更新
+if (!$errstr) {    // エラーがない場合にのみ
+	$sql = "SELECT id, id1 FROM item1 ORDER BY id ASC, id1 ASC";
+	$res = mysqli_query($db, $sql);
+	if ($res) {
+			$stmt = mysqli_prepare($db, "UPDATE item1 SET name=?, recommendation=?, up_recommendation=? WHERE id=? AND id1=?");
+			while ($fld = mysqli_fetch_object($res)) {
+					if (isset($_POST['regist' . $fld->id])) {
+							mysqli_stmt_bind_param($stmt, 'siiii', $_POST['name' . $fld->id . $fld->id1], $_POST['recommendation' . $fld->id . $fld->id1], $_POST['up_recommendation' . $fld->id . $fld->id1], $fld->id, $fld->id1);
+							mysqli_stmt_execute($stmt);
+							if (mysqli_stmt_error($stmt)) {
+									error_log("Stmt execute failed: " . mysqli_stmt_error($stmt));
+							}
+					}
+			}
+			mysqli_stmt_close($stmt);  // ステートメントを閉じる
+	}
 }
 
 
-// HTMLコンテンツを別のテンプレートファイルから読み込む
-include("templates/item1_template.php");
 
-// データベース接続の切断をHTMLの読み込み後に
-Connection::disconnect($db);
+// カテゴリと大項目データを取得(HTML表示用)
+$categories = [];  // カテゴリと大項目のデータを保持する配列
+$stmt = mysqli_prepare($db, "SELECT category.item, category.id, category.category, item1.id1, item1.name, item1.point, item1.no, item1.recommendation, item1.up_recommendation FROM item1 INNER JOIN category ON item1.id = category.id ORDER BY category.id ASC, item1.no ASC");
+mysqli_stmt_execute($stmt);
+$res = mysqli_stmt_get_result($stmt);
+
+$current_category_id = null;
+$current_category = [];
+
+while ($row = mysqli_fetch_assoc($res)) {
+		if ($current_category_id != $row['id']) {
+				if (!empty($current_category)) {
+						$categories[] = $current_category;  // 現在のカテゴリを配列に追加
+				}
+				$current_category_id = $row['id'];
+				$current_category = [
+						'category' => $row['category'],
+						'items' => []
+				];
+		}
+		$current_category['items'][] = $row;
+}
+if (!empty($current_category)) {
+		$categories[] = $current_category;  // 最後のカテゴリを追加
+}
 
 ?>
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="admin.css" media="all">
+<title>大項目編集</title>
+</head>
+<body>
+
+<div align='center'>
+	<h1>QIシステム</h1>
+	<form method='POST' action='<?php echo $_SERVER['PHP_SELF']; ?>'>
+		<table cellspacing='1' cellpadding='5'>
+			<tr><th><a href='index.php'>メニュー</a> ≫ 大項目編集<?php if (!empty($errstr)) echo "<br>" . sanitize($errstr); ?></th></tr>
+			<tr><td>
+				<?php foreach ($categories as $category): ?>
+					<fieldset>
+						<legend><?php echo sanitize($category['category']); ?></legend>
+						<table cellspacing='1' cellpadding='5'>
+							<tr><th>No.</th><th>内容</th><th>配点</th><th>高得点基準</th><th>低得点基準</th><th>中項目</th></tr>
+							<?php foreach ($category['items'] as $item): ?>
+								<tr>
+									<td align='right'><?php echo $item['no']; ?></td>
+									<td><input size='60' type='text' name='name<?php echo $item['id'].$item['id1']; ?>' value='<?php echo sanitize($item['name']); ?>'></td>
+									<td align='right'>
+										<?php if ($public == Config::OPEN): ?>
+											<?php echo sanitize($item['point']); ?> 
+										<?php else: ?>
+											<input size='4' type='text' maxlength='4' name='point<?php echo $item['id'].$item['id1']; ?>' value='<?php echo sanitize($item['point']); ?>'>
+										<?php endif; ?>
+									</td>
+									<td style='text-align:center;'><input size='4' type='text' maxlength='4' name='up_recommendation<?php echo $item['id'].$item['id1']; ?>' value='<?php echo sanitize($item['up_recommendation']); ?>'></td>
+									<td style='text-align:center;'><input size='4' type='text' maxlength='4' name='recommendation<?php echo $item['id'].$item['id1']; ?>' value='<?php echo sanitize($item['recommendation']); ?>'></td>
+									<td><a href='item2.php?id=<?php echo $item['id']; ?>&id1=<?php echo $item['id1']; ?>'>中項目</a></td>
+								</tr>
+							<?php endforeach; ?>
+						</table>
+						<div align='right' style='margin:5px;'>
+							<input type='reset' name='reset' value='リセット'style='margin-right: 30px;'>
+							<input type='submit' name='regist<?php echo $category['id']; ?>' value='   登   録   '>
+						</div>
+					</fieldset>
+				<?php endforeach; ?>
+			</td></tr>
+		</table>
+	</form>
+</div>
+
+</body>
+</html>

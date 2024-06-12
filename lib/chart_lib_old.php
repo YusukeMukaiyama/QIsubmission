@@ -37,7 +37,7 @@ class PDF extends TCPDF {
       $this->AddPage();
 
       // フォントの追加
-      $fontfile = '../lib/TCPDF-main/fonts/MSMINCHO.TTF';
+      $fontfile = '../lib/TCPDF-main/fonts/ZenOldMincho-Regular.ttf';
       $fontname = TCPDF_FONTS::addTTFfont($fontfile, 'TrueTypeUnicode', '', 32);
 
       // 日本語の明朝体フォントを設定
@@ -125,7 +125,7 @@ class PDF extends TCPDF {
       // マージンを設定
       $this->SetLeftMargin($this->margin);
       // 新しいフォント設定
-      $this->SetFont('msmincho', '', 12);
+      $this->SetFont('zenoldmincho', '', 12);
 
       // フォントサイズの設定
       $this->SetFontSize ( $this->title_font_size );
