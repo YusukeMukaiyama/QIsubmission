@@ -1,14 +1,6 @@
-[11-Jun-2024 18:05:13 Asia/Tokyo] PHP Warning:  Constant K_PATH_FONTS already defined in /home/xs728645/tuneup-works.com/public_html/qisystem/admin/makedata_cli.php on line 7
-[11-Jun-2024 18:05:13 Asia/Tokyo] PHP Warning:  Constant K_TCPDF_CALLS_IN_HTML already defined in /home/xs728645/tuneup-works.com/public_html/qisystem/admin/makedata_cli.php on line 9
-[11-Jun-2024 18:05:56 Asia/Tokyo] PHP Warning:  Constant K_PATH_FONTS already defined in /home/xs728645/tuneup-works.com/public_html/qisystem/admin/makedata_cli.php on line 7
-[11-Jun-2024 18:05:56 Asia/Tokyo] PHP Warning:  Constant K_TCPDF_CALLS_IN_HTML already defined in /home/xs728645/tuneup-works.com/public_html/qisystem/admin/makedata_cli.php on line 9
-[11-Jun-2024 18:09:37 Asia/Tokyo] PHP Warning:  Undefined array key "" in /home/xs728645/tuneup-works.com/public_html/qisystem/admin/makedata_cli.php on line 173
-[11-Jun-2024 18:09:37 Asia/Tokyo] PHP Warning:  Undefined array key "" in /home/xs728645/tuneup-works.com/public_html/qisystem/admin/makedata_cli.php on line 173
-[11-Jun-2024 18:10:06 Asia/Tokyo] PHP Warning:  Undefined array key 3 in /home/xs728645/tuneup-works.com/public_html/qisystem/lib/chart_lib_hosp2.php on line 338
-[11-Jun-2024 18:10:06 Asia/Tokyo] PHP Warning:  Undefined array key 3 in /home/xs728645/tuneup-works.com/public_html/qisystem/lib/chart_lib_hosp2.php on line 338
-[11-Jun-2024 18:10:06 Asia/Tokyo] PHP Warning:  fopen(): Remote host file access not supported, file://./pdf_bat/02-0003/21-02-0003_total.pdf in /home/xs728645/tuneup-works.com/public_html/qisystem/lib/TCPDF-main/include/tcpdf_static.php on line 1811
-[11-Jun-2024 18:10:06 Asia/Tokyo] PHP Warning:  fopen(file://./pdf_bat/02-0003/21-02-0003_total.pdf): Failed to open stream: no suitable wrapper could be found in /home/xs728645/tuneup-works.com/public_html/qisystem/lib/TCPDF-main/include/tcpdf_static.php on line 1811
-[11-Jun-2024 18:26:53 Asia/Tokyo] PHP Notice:  Undefined offset: 3 in /home/xs728645/tuneup-works.com/public_html/qisystem/lib/chart_lib_hosp2.php on line 338
-[11-Jun-2024 18:26:53 Asia/Tokyo] PHP Notice:  Undefined offset: 3 in /home/xs728645/tuneup-works.com/public_html/qisystem/lib/chart_lib_hosp2.php on line 338
-[11-Jun-2024 18:36:25 Asia/Tokyo] PHP Notice:  Undefined offset: 3 in /home/xs728645/tuneup-works.com/public_html/qisystem/lib/chart_lib_hosp2.php on line 338
-[11-Jun-2024 18:36:25 Asia/Tokyo] PHP Notice:  Undefined offset: 3 in /home/xs728645/tuneup-works.com/public_html/qisystem/lib/chart_lib_hosp2.php on line 338
+[14-Jun-2024 11:02:46 Asia/Tokyo] PHP Notice:  Undefined offset: 3 in /home/xs728645/tuneup-works.com/public_html/qisystem/lib/chart_lib_hosp2.php on line 338
+[14-Jun-2024 11:02:46 Asia/Tokyo] PHP Notice:  Undefined offset: 3 in /home/xs728645/tuneup-works.com/public_html/qisystem/lib/chart_lib_hosp2.php on line 338
+[21-Jun-2024 17:33:33 Asia/Tokyo] PHP Notice:  Undefined offset: 3 in /home/xs728645/tuneup-works.com/public_html/qisystem/lib/chart_lib_hosp2.php on line 338
+[21-Jun-2024 17:33:33 Asia/Tokyo] PHP Notice:  Undefined offset: 3 in /home/xs728645/tuneup-works.com/public_html/qisystem/lib/chart_lib_hosp2.php on line 338
+[21-Jun-2024 17:33:54 Asia/Tokyo] PHP Notice:  Undefined offset: 3 in /home/xs728645/tuneup-works.com/public_html/qisystem/lib/chart_lib_hosp2.php on line 338
+[21-Jun-2024 17:33:54 Asia/Tokyo] PHP Notice:  Undefined offset: 3 in /home/xs728645/tuneup-works.com/public_html/qisystem/lib/chart_lib_hosp2.php on line 338

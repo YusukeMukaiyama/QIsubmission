@@ -1,0 +1,5 @@
+
+AuthUserFile "/home/xs728645/tuneup-works.com/htpasswd/qisystem/.htpasswd"
+AuthName "Member Site"
+AuthType BASIC
+require valid-user

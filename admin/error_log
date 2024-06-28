@@ -213,3 +213,136 @@ POST data: Array
 (
 )
 
+フォントファイルが見つかりました: /home/xs728645/tuneup-works.com/public_html/qisystem/lib/TCPDF-main/fonts/ZenOldMincho-Regular.ttfSTEP 1: リクエスト受け取り
+STEP 3: データベース接続 - 成功
+POST data: Array
+(
+)
+
+フォントファイルが見つかりました: /home/xs728645/tuneup-works.com/public_html/qisystem/lib/TCPDF-main/fonts/ZenOldMincho-Regular.ttfSTEP 1: リクエスト受け取り
+STEP 3: データベース接続 - 成功
+POST data: Array
+(
+    [ftype] => 
+    [pref1] => 
+    [pdf_h] => PDF
+)
+
+フォントファイルが見つかりました: /home/xs728645/tuneup-works.com/public_html/qisystem/lib/TCPDF-main/fonts/ZenOldMincho-Regular.ttfSTEP 1: リクエスト受け取り
+STEP 3: データベース接続 - 成功
+POST data: Array
+(
+)
+
+フォントファイルが見つかりました: /home/xs728645/tuneup-works.com/public_html/qisystem/lib/TCPDF-main/fonts/ZenOldMincho-Regular.ttfSTEP 1: リクエスト受け取り
+STEP 3: データベース接続 - 成功
+POST data: Array
+(
+    [ftype] => 
+    [pref1] => 02
+)
+
+フォントファイルが見つかりました: /home/xs728645/tuneup-works.com/public_html/qisystem/lib/TCPDF-main/fonts/ZenOldMincho-Regular.ttfSTEP 1: リクエスト受け取り
+STEP 3: データベース接続 - 成功
+POST data: Array
+(
+    [ftype] => 
+    [pref1] => 02
+    [hos1] => 0003
+)
+
+STEP 1: リクエスト受け取り
+STEP 2: リクエストパラメータのチェック - 処理開始
+STEP 2: リクエストパラメータのチェック - 成功
+STEP 3: データベース接続 - 成功
+STEP 6: 生成されたファイルのチェック - 処理開始
+STEP 6: 生成されたファイルのチェック - ファイルあり
+STEP 1: リクエスト受け取り
+STEP 2: リクエストパラメータのチェック - 処理開始
+STEP 2: リクエストパラメータのチェック - 成功
+STEP 3: データベース接続 - 成功
+STEP 5: 生成プロセスの開始 - 処理開始
+CLI Command: ~/bin/php -f /home/xs728645/tuneup-works.com/public_html/qisystem/admin/makedata_cli.php pdf_all
+exec output: STOP:NOW WORKING.
+exec return_var: 0
+STEP 5: 生成プロセスの開始 - 成功
+STEP 1: リクエスト受け取り
+STEP 2: リクエストパラメータのチェック - 処理開始
+STEP 2: リクエストパラメータのチェック - ファイルタイプが指定されていません
+STEP 1: リクエスト受け取り
+STEP 2: リクエストパラメータのチェック - 処理開始
+STEP 2: リクエストパラメータのチェック - 成功
+STEP 3: データベース接続 - 成功
+STEP 6: 生成されたファイルのチェック - 処理開始
+STEP 6: 生成されたファイルのチェック - ファイルあり
+フォントファイルが見つかりました: /home/xs728645/tuneup-works.com/public_html/qisystem/lib/TCPDF-main/fonts/ZenOldMincho-Regular.ttfSTEP 1: リクエスト受け取り
+STEP 3: データベース接続 - 成功
+POST data: Array
+(
+)
+
+フォントファイルが見つかりました: /home/xs728645/tuneup-works.com/public_html/qisystem/lib/TCPDF-main/fonts/ZenOldMincho-Regular.ttfSTEP 1: リクエスト受け取り
+STEP 3: データベース接続 - 成功
+POST data: Array
+(
+)
+
+フォントファイルが見つかりました: /home/xs728645/tuneup-works.com/public_html/qisystem/lib/TCPDF-main/fonts/ZenOldMincho-Regular.ttfSTEP 1: リクエスト受け取り
+STEP 3: データベース接続 - 成功
+POST data: Array
+(
+)
+
+フォントファイルが見つかりました: /home/xs728645/tuneup-works.com/public_html/qisystem/lib/TCPDF-main/fonts/ZenOldMincho-Regular.ttfSTEP 1: リクエスト受け取り
+STEP 3: データベース接続 - 成功
+POST data: Array
+(
+    [ftype] => 
+    [pref1] => 02
+)
+
+フォントファイルが見つかりました: /home/xs728645/tuneup-works.com/public_html/qisystem/lib/TCPDF-main/fonts/ZenOldMincho-Regular.ttfSTEP 1: リクエスト受け取り
+STEP 3: データベース接続 - 成功
+POST data: Array
+(
+    [ftype] => 
+    [pref1] => 02
+    [hos1] => 0003
+)
+
+STEP 1: リクエスト受け取り
+STEP 2: リクエストパラメータのチェック - 処理開始
+STEP 2: リクエストパラメータのチェック - 成功
+STEP 3: データベース接続 - 成功
+STEP 6: 生成されたファイルのチェック - 処理開始
+STEP 6: 生成されたファイルのチェック - ファイルあり
+STEP 1: リクエスト受け取り
+STEP 2: リクエストパラメータのチェック - 処理開始
+STEP 2: リクエストパラメータのチェック - 成功
+STEP 3: データベース接続 - 成功
+STEP 5: 生成プロセスの開始 - 処理開始
+CLI Command: ~/bin/php -f /home/xs728645/tuneup-works.com/public_html/qisystem/admin/makedata_cli.php pdf_all
+exec output: STOP:NOW WORKING.
+exec return_var: 0
+STEP 5: 生成プロセスの開始 - 成功
+STEP 1: リクエスト受け取り
+STEP 2: リクエストパラメータのチェック - 処理開始
+STEP 2: リクエストパラメータのチェック - 成功
+STEP 3: データベース接続 - 成功
+STEP 6: 生成されたファイルのチェック - 処理開始
+STEP 6: 生成されたファイルのチェック - ファイルあり
+STEP 1: リクエスト受け取り
+STEP 2: リクエストパラメータのチェック - 処理開始
+STEP 2: リクエストパラメータのチェック - 成功
+STEP 3: データベース接続 - 成功
+STEP 5: 生成プロセスの開始 - 処理開始
+CLI Command: ~/bin/php -f /home/xs728645/tuneup-works.com/public_html/qisystem/admin/makedata_cli.php pdf_all
+exec output: STOP:NOW WORKING.
+exec return_var: 0
+STEP 5: 生成プロセスの開始 - 成功
+STEP 1: リクエスト受け取り
+STEP 2: リクエストパラメータのチェック - 処理開始
+STEP 2: リクエストパラメータのチェック - 成功
+STEP 3: データベース接続 - 成功
+STEP 6: 生成されたファイルのチェック - 処理開始
+STEP 6: 生成されたファイルのチェック - ファイルあり
